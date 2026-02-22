@@ -1,0 +1,5 @@
+參考專案
+https://github.com/Ming874/FinAgent
+參考了其中的搜尋功能
+
+其他的資料由網路搜尋獲取

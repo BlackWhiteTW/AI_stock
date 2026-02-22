@@ -1,0 +1,25 @@
+# Web 框架
+streamlit
+
+# 資料獲取
+yfinance
+requests
+beautifulsoup4
+
+# 資料處理
+pandas
+numpy
+
+# 視覺化
+plotly
+
+# 機器學習
+torch
+scikit-learn
+
+# 資料解析
+lxml
+html5lib
+
+# 排程任務
+schedule

@@ -1,0 +1,236 @@
+{
+    "balance": 16733.0,
+    "portfolio": {
+        "00919.TW": {
+            "qty": 25000,
+            "avg_price": 23.4734
+        },
+        "2460.TW": {
+            "qty": 15000,
+            "avg_price": 26.387
+        }
+    },
+    "history": [
+        {
+            "time": "2026-02-13 10:21:50",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:48",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:47",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:43",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:40",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:38",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:36",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:35",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:34",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:33",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:31",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:30",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:25",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:22",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-13 10:21:21",
+            "action": "BUY",
+            "symbol": "2460.TW",
+            "price": 26.35,
+            "qty": 1000,
+            "amount": 26350.0,
+            "fee": 37,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-05 05:42:16",
+            "action": "SELL",
+            "symbol": "0050.TW",
+            "price": 72.9,
+            "qty": 5000,
+            "amount": 362888.0,
+            "fee": 519,
+            "tax": 1093
+        },
+        {
+            "time": "2026-02-02 05:47:07",
+            "action": "BUY",
+            "symbol": "0050.TW",
+            "price": 72.6,
+            "qty": 1000,
+            "amount": 72600.0,
+            "fee": 103,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-02 05:47:06",
+            "action": "BUY",
+            "symbol": "0050.TW",
+            "price": 72.6,
+            "qty": 1000,
+            "amount": 72600.0,
+            "fee": 103,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-02 05:47:05",
+            "action": "BUY",
+            "symbol": "0050.TW",
+            "price": 72.6,
+            "qty": 1000,
+            "amount": 72600.0,
+            "fee": 103,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-02 05:47:04",
+            "action": "BUY",
+            "symbol": "0050.TW",
+            "price": 72.6,
+            "qty": 1000,
+            "amount": 72600.0,
+            "fee": 103,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-02 05:47:01",
+            "action": "BUY",
+            "symbol": "0050.TW",
+            "price": 72.6,
+            "qty": 1000,
+            "amount": 72600.0,
+            "fee": 103,
+            "tax": 0
+        },
+        {
+            "time": "2026-02-02 05:46:43",
+            "action": "BUY",
+            "symbol": "00919.TW",
+            "price": 23.44,
+            "qty": 25000,
+            "amount": 586000.0,
+            "fee": 835,
+            "tax": 0
+        }
+    ],
+    "last_dividend_check": "2026-02-02"
+}

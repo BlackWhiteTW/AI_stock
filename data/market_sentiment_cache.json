@@ -1,0 +1,9 @@
+{
+  "market_sentiment": {
+    "sentiment": "Neutral",
+    "score": 50.0,
+    "rsi": 50.0,
+    "market_index": "^TWII"
+  },
+  "timestamp": "2026-02-21T16:51:26.131428"
+}

@@ -1,0 +1,25 @@
+# 屏蔽 .env 檔案，避免敏感資訊洩漏
+.env
+
+# 屏蔽股票數據和指標快取檔案
+data/indicator_cache/*.pkl
+data/news_cache/*.json
+data/transaction_cache/*.json
+data/stock_data/*.csv
+
+# 屏蔽日誌檔案
+data/training_records/*.json
+data/financial_data/*
+
+# python 虛擬環境
+venv/
+
+# pycache
+__pycache__/
+
+# 測試相關檔案
+tests/__pycache__/
+tests/test_*.py
+
+# 模型 請自己訓練 他太多了
+data/saved_models/*.pth
