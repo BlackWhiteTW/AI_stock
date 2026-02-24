@@ -22808,5 +22808,15 @@
         "actual_price": null,
         "diff_pct": null,
         "accuracy": "等待資料更新"
+    },
+    {
+        "ticker": "0050",
+        "base_price": 76.3499984741211,
+        "predicted_price": 71.55,
+        "expected_change_pct": -6.29,
+        "date": "2026-02-24",
+        "actual_price": null,
+        "diff_pct": null,
+        "accuracy": "等待收盤驗證"
     }
 ]

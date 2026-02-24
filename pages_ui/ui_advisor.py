@@ -9,30 +9,88 @@ import torch
 import traceback
 import traceback
 
+from services.llm_service import LLMService
+from services.search_optimizer import SearchOptimizer
+
+# 初始化服務
+llm_service = LLMService()
+search_optimizer = SearchOptimizer()
+
 def render_tab_advisor(ai_advisor, symbol, hist_data, current_price, account, df_stocks):
     st.header("🤖 AI 智能投資顧問")
     
-    # --- 硬體加速狀態檢查 ---
-    
-    device_status = "未知"
-    device_color = "gray"
-    
-    if torch.cuda.is_available():
-        gpu_name = torch.cuda.get_device_name(0)
-        device_status = f"🚀 GPU 加速已啟用: {gpu_name}"
-        device_color = "green"
-    else:
-        device_status = "⚠️ 目前使用 CPU 運算 (未偵測到 CUDA)"
-        device_color = "orange"
-        
-    st.markdown(f":{device_color}[**{device_status}**]")
-    # -----------------------
+    # 建立主分頁
+    tab_analysis, tab_chat, tab_prediction_check = st.tabs(["📊 市場掃描與分析", "💬 與 AI 分析師對話", "✅ 每日預測驗證"])
 
-    st.markdown("本功能會依據**技術指標 (RSI, MACD, 均線, 布林通道)** 對股票進行綜合評分，並提供每日預測驗證。")
-    
-    # 建立分頁，將原有的個股/掃描功能放入第一頁，新功能放入第二頁
-    tab_analysis, tab_prediction_check = st.tabs(["📊 個股與市場掃描", "✅ 每日預測驗證"])
-    
+    with tab_chat:
+        st.subheader(f"💬 正在與 {symbol} 專屬分析師對話")
+        st.info("您可以詢問關於這檔股票的任何問題，AI 會結合目前的技術面、基本面與即時新聞為您解答。")
+        
+        # 初始化聊天紀錄
+        if "chat_history" not in st.session_state:
+            st.session_state.chat_history = []
+
+        # 顯示聊天紀錄
+        for message in st.session_state.chat_history:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+
+        # 快速提問按鈕
+        quick_queries = [
+            f"總結 {symbol} 的當前多空力道",
+            f"根據最新新聞，{symbol} 有什麼潛在利多？",
+            f"如果我現在買入 {symbol}，停損點建議設在哪？",
+            f"這檔股票適合長期持有嗎？"
+        ]
+        
+        cols = st.columns(2)
+        for i, q in enumerate(quick_queries):
+            if cols[i % 2].button(q, key=f"q_{i}", use_container_width=True):
+                st.session_state.temp_query = q
+
+        # 聊天輸入框
+        if prompt := st.chat_input("輸入您的問題..."):
+            st.session_state.temp_query = prompt
+
+        # 處理查詢
+        if "temp_query" in st.session_state:
+            query = st.session_state.temp_query
+            del st.session_state.temp_query
+            
+            # 1. 顯示使用者問題
+            st.session_state.chat_history.append({"role": "user", "content": query})
+            with st.chat_message("user"):
+                st.markdown(query)
+
+            # 2. 獲取背景資訊 (使用我們之前做的 SearchOptimizer)
+            with st.spinner("AI 分析師正在閱讀報告與即時新聞..."):
+                try:
+                    summary = search_optimizer.get_cached_summary(symbol, ai_advisor)
+                    
+                    # 構建給 Gemini 的 Context
+                    context = f"""
+                    用戶當前關注的股票: {symbol}
+                    當前價格: {current_price}
+                    技術趨勢: {summary['technical']['trend']['daily']}
+                    最新新聞摘要: {summary['web_news']}
+                    AI 原始診斷: {summary['ai_verdict']}
+                    """
+                    
+                    # 調用 Gemini 進行對話式回答
+                    full_prompt = f"背景資訊如下：\n{context}\n\n請根據以上資訊，以專業分析師的口吻回答用戶的問題：{query}"
+                    
+                    if llm_service.model:
+                        response = llm_service.model.generate_content(full_prompt).text
+                    else:
+                        response = "⚠️ Gemini API 未設定，無法提供智慧對話功能。"
+                        
+                    # 3. 顯示 AI 回覆
+                    with st.chat_message("assistant"):
+                        st.markdown(response)
+                    st.session_state.chat_history.append({"role": "assistant", "content": response})
+                except Exception as e:
+                    st.error(f"分析師暫時忙碌中: {e}")
+
     with tab_analysis:
         col_ai_1, col_ai_2 = st.columns([1, 1])
         

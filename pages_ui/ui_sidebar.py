@@ -1,6 +1,10 @@
 import streamlit as st
 import pandas as pd
 from utils import get_tw_stock_list, get_stock_data
+from services.search_optimizer import SearchOptimizer
+
+# 初始化搜尋優化器
+search_optimizer = SearchOptimizer()
 
 def render_sidebar(account, ai_advisor=None):
     st.sidebar.title("交易操作面板")
@@ -107,6 +111,29 @@ def render_sidebar(account, ai_advisor=None):
         stock_name = stock_info.get('longName', symbol)
         
         st.sidebar.metric(label=f"{stock_name} ({symbol}) 現價", value=f"{current_price}")
+
+        # --- [優化] AI 智慧搜尋快報 (FinAgent Style) ---
+        with st.sidebar.expander("🔍 AI 智慧快報", expanded=True):
+            try:
+                summary = search_optimizer.get_cached_summary(symbol, ai_advisor)
+                if summary:
+                    # 頂部數據
+                    cols = st.columns(2)
+                    cols[0].markdown(f"**產業**: {summary['industry'] or '未知'}")
+                    cols[1].markdown(f"**情緒**: {summary['sentiment']['score']:.1f}")
+                    
+                    st.markdown("---")
+                    # LLM 真人診斷 (佔據主要空間)
+                    st.markdown("**🧠 AI 真人級診斷**")
+                    st.info(summary['ai_verdict'])
+                    
+                    with st.expander("查看原始數據"):
+                        st.write(f"📊 **技術面**: {summary['technical']['trend']['daily']} (MFI: {summary['technical']['mfi']:.1f})")
+                        st.write(f"💰 **基本面**: 營收成長 {summary['fundamental']['revenue_growth']:.1f}%")
+                else:
+                    st.write("無法產生智慧快報")
+            except Exception as e:
+                st.write(f"快報載入中... {e}")
 
         # 2. 交易下單
         st.sidebar.markdown("---")

@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Streamlit App",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "streamlit",
+            "args": [
+                "run",
+                "app.py",
+                "--server.port",
+                "8501"
+            ],
+            "jinja": true,
+            "smartStep": true
+        },
+        {
+            "name": "Python: 訓練基礎模型",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "scripts/train_base_model.py",
+            "console": "integratedTerminal"
+        }
+    ]
+}

@@ -8,18 +8,17 @@ data/transaction_cache/*.json
 data/stock_data/*.csv
 
 # 屏蔽日誌檔案
-data/training_records/*.json
-data/financial_data/*
+data/*
 
 # python 虛擬環境
-venv/
+venv/*
 
 # pycache
 __pycache__/
 
 # 測試相關檔案
 tests/__pycache__/
-tests/test_*.py
+tests/*
 
-# 模型 請自己訓練 他太多了
+# 模型 請自己訓練 通常 200 - 300 即可 設備優良可全跑
 data/saved_models/*.pth
