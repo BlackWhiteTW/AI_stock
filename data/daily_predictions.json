@@ -22818,5 +22818,2575 @@
         "actual_price": null,
         "diff_pct": null,
         "accuracy": "等待收盤驗證"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "0050.TW",
+        "base_price": 79.5,
+        "predicted_price": 71.55,
+        "expected_change_pct": -10.0,
+        "actual_price": 80.5,
+        "diff_pct": -11.12,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "0052.TW",
+        "base_price": 47.279998779296875,
+        "predicted_price": 42.59,
+        "expected_change_pct": -9.92,
+        "actual_price": 48.380001068115234,
+        "diff_pct": -11.97,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "0056.TW",
+        "base_price": 39.720001220703125,
+        "predicted_price": 37.93,
+        "expected_change_pct": -4.51,
+        "actual_price": 39.97999954223633,
+        "diff_pct": -5.13,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "0061.TW",
+        "base_price": 23.75,
+        "predicted_price": 21.38,
+        "expected_change_pct": -9.98,
+        "actual_price": 23.8700008392334,
+        "diff_pct": -10.43,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "006205.TW",
+        "base_price": 41.220001220703125,
+        "predicted_price": 37.1,
+        "expected_change_pct": -10.0,
+        "actual_price": 41.459999084472656,
+        "diff_pct": -10.52,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "006208.TW",
+        "base_price": 184.0,
+        "predicted_price": 176.15,
+        "expected_change_pct": -4.27,
+        "actual_price": 187.75,
+        "diff_pct": -6.18,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00631L",
+        "base_price": 514.9000244140625,
+        "predicted_price": 465.95,
+        "expected_change_pct": -9.51,
+        "actual_price": 522.7999877929688,
+        "diff_pct": -10.87,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00635U",
+        "base_price": 54.900001525878906,
+        "predicted_price": 49.41,
+        "expected_change_pct": -10.0,
+        "actual_price": 54.95000076293945,
+        "diff_pct": -10.08,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00636.TW",
+        "base_price": 26.56999969482422,
+        "predicted_price": 26.84,
+        "expected_change_pct": 1.02,
+        "actual_price": 26.670000076293945,
+        "diff_pct": 0.64,
+        "accuracy": "⭐⭐⭐ 準確"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00638R",
+        "base_price": 7.039999961853027,
+        "predicted_price": 7.74,
+        "expected_change_pct": 9.94,
+        "actual_price": 7.050000190734863,
+        "diff_pct": 9.79,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00663L",
+        "base_price": 67.1500015258789,
+        "predicted_price": 60.45,
+        "expected_change_pct": -9.98,
+        "actual_price": 69.9000015258789,
+        "diff_pct": -13.52,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00675L",
+        "base_price": 203.5,
+        "predicted_price": 183.15,
+        "expected_change_pct": -10.0,
+        "actual_price": 211.14999389648438,
+        "diff_pct": -13.26,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00685L",
+        "base_price": 183.14999389648438,
+        "predicted_price": 164.85,
+        "expected_change_pct": -9.99,
+        "actual_price": 190.0500030517578,
+        "diff_pct": -13.26,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00878.TW",
+        "base_price": 23.93000030517578,
+        "predicted_price": 22.8,
+        "expected_change_pct": -4.72,
+        "actual_price": 24.0,
+        "diff_pct": -5.0,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00881.TW",
+        "base_price": 37.09000015258789,
+        "predicted_price": 35.52,
+        "expected_change_pct": -4.23,
+        "actual_price": 38.09000015258789,
+        "diff_pct": -6.75,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00882.TW",
+        "base_price": 16.190000534057617,
+        "predicted_price": 15.42,
+        "expected_change_pct": -4.76,
+        "actual_price": 16.270000457763672,
+        "diff_pct": -5.22,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00891.TW",
+        "base_price": 25.43000030517578,
+        "predicted_price": 22.91,
+        "expected_change_pct": -9.91,
+        "actual_price": 25.63999938964844,
+        "diff_pct": -10.65,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00892.TW",
+        "base_price": 27.489999771118164,
+        "predicted_price": 24.74,
+        "expected_change_pct": -10.0,
+        "actual_price": 27.959999084472656,
+        "diff_pct": -11.52,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00893.TW",
+        "base_price": 34.369998931884766,
+        "predicted_price": 30.93,
+        "expected_change_pct": -10.01,
+        "actual_price": 35.16999816894531,
+        "diff_pct": -12.06,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00894.TW",
+        "base_price": 33.290000915527344,
+        "predicted_price": 29.96,
+        "expected_change_pct": -10.0,
+        "actual_price": 34.18000030517578,
+        "diff_pct": -12.35,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00895.TW",
+        "base_price": 41.90999984741211,
+        "predicted_price": 37.72,
+        "expected_change_pct": -10.0,
+        "actual_price": 42.5,
+        "diff_pct": -11.25,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00896.TW",
+        "base_price": 22.139999389648438,
+        "predicted_price": 19.96,
+        "expected_change_pct": -9.85,
+        "actual_price": 22.530000686645508,
+        "diff_pct": -11.41,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00900.TW",
+        "base_price": 14.930000305175781,
+        "predicted_price": 13.44,
+        "expected_change_pct": -9.98,
+        "actual_price": 14.890000343322754,
+        "diff_pct": -9.74,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00901.TW",
+        "base_price": 30.719999313354492,
+        "predicted_price": 27.65,
+        "expected_change_pct": -9.99,
+        "actual_price": 31.600000381469727,
+        "diff_pct": -12.5,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00902.TW",
+        "base_price": 14.760000228881836,
+        "predicted_price": 13.28,
+        "expected_change_pct": -10.03,
+        "actual_price": 15.239999771118164,
+        "diff_pct": -12.86,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00904.TW",
+        "base_price": 29.709999084472656,
+        "predicted_price": 26.78,
+        "expected_change_pct": -9.86,
+        "actual_price": 30.1299991607666,
+        "diff_pct": -11.12,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00905.TW",
+        "base_price": 20.170000076293945,
+        "predicted_price": 18.15,
+        "expected_change_pct": -10.01,
+        "actual_price": 20.559999465942383,
+        "diff_pct": -11.72,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00907.TW",
+        "base_price": 15.880000114440918,
+        "predicted_price": 14.29,
+        "expected_change_pct": -10.01,
+        "actual_price": 15.760000228881836,
+        "diff_pct": -9.33,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00911.TW",
+        "base_price": 38.20000076293945,
+        "predicted_price": 34.38,
+        "expected_change_pct": -10.0,
+        "actual_price": 38.439998626708984,
+        "diff_pct": -10.56,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00912.TW",
+        "base_price": 25.149999618530273,
+        "predicted_price": 22.63,
+        "expected_change_pct": -10.02,
+        "actual_price": 25.75,
+        "diff_pct": -12.12,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00913.TW",
+        "base_price": 31.809999465942383,
+        "predicted_price": 28.63,
+        "expected_change_pct": -10.0,
+        "actual_price": 33.0,
+        "diff_pct": -13.24,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00915.TW",
+        "base_price": 24.719999313354492,
+        "predicted_price": 22.28,
+        "expected_change_pct": -9.87,
+        "actual_price": 24.639999389648438,
+        "diff_pct": -9.58,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00918.TW",
+        "base_price": 23.6200008392334,
+        "predicted_price": 21.26,
+        "expected_change_pct": -9.99,
+        "actual_price": 23.729999542236328,
+        "diff_pct": -10.41,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00919.TW",
+        "base_price": 24.299999237060547,
+        "predicted_price": 23.12,
+        "expected_change_pct": -4.86,
+        "actual_price": 24.270000457763672,
+        "diff_pct": -4.74,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00920.TW",
+        "base_price": 21.459999084472656,
+        "predicted_price": 19.31,
+        "expected_change_pct": -10.02,
+        "actual_price": 22.010000228881836,
+        "diff_pct": -12.27,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00921.TW",
+        "base_price": 19.010000228881836,
+        "predicted_price": 17.11,
+        "expected_change_pct": -9.99,
+        "actual_price": 19.280000686645508,
+        "diff_pct": -11.26,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00922.TW",
+        "base_price": 31.1299991607666,
+        "predicted_price": 28.02,
+        "expected_change_pct": -9.99,
+        "actual_price": 31.760000228881836,
+        "diff_pct": -11.78,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00923.TW",
+        "base_price": 31.65999984741211,
+        "predicted_price": 28.49,
+        "expected_change_pct": -10.01,
+        "actual_price": 32.4900016784668,
+        "diff_pct": -12.31,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00927.TW",
+        "base_price": 25.690000534057617,
+        "predicted_price": 23.14,
+        "expected_change_pct": -9.93,
+        "actual_price": 25.75,
+        "diff_pct": -10.14,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00935.TW",
+        "base_price": 38.849998474121094,
+        "predicted_price": 34.96,
+        "expected_change_pct": -10.01,
+        "actual_price": 39.72999954223633,
+        "diff_pct": -12.01,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00938.TW",
+        "base_price": 19.579999923706055,
+        "predicted_price": 17.62,
+        "expected_change_pct": -10.01,
+        "actual_price": 19.700000762939453,
+        "diff_pct": -10.56,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00939.TW",
+        "base_price": 16.299999237060547,
+        "predicted_price": 14.67,
+        "expected_change_pct": -10.0,
+        "actual_price": 16.329999923706055,
+        "diff_pct": -10.17,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00940.TW",
+        "base_price": 9.869999885559082,
+        "predicted_price": 8.89,
+        "expected_change_pct": -9.93,
+        "actual_price": 9.920000076293945,
+        "diff_pct": -10.38,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00941.TW",
+        "base_price": 22.540000915527344,
+        "predicted_price": 20.29,
+        "expected_change_pct": -9.98,
+        "actual_price": 22.81999969482422,
+        "diff_pct": -11.09,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00945B",
+        "base_price": 14.5600004196167,
+        "predicted_price": 13.8,
+        "expected_change_pct": -5.22,
+        "actual_price": 14.470000267028809,
+        "diff_pct": -4.63,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00947.TW",
+        "base_price": 24.639999389648438,
+        "predicted_price": 22.18,
+        "expected_change_pct": -9.98,
+        "actual_price": 24.450000762939453,
+        "diff_pct": -9.28,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00949.TW",
+        "base_price": 20.059999465942383,
+        "predicted_price": 19.29,
+        "expected_change_pct": -3.84,
+        "actual_price": 20.139999389648438,
+        "diff_pct": -4.22,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00951.TW",
+        "base_price": 14.890000343322754,
+        "predicted_price": 13.4,
+        "expected_change_pct": -10.01,
+        "actual_price": 15.359999656677246,
+        "diff_pct": -12.76,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00954.TW",
+        "base_price": 15.989999771118164,
+        "predicted_price": 14.39,
+        "expected_change_pct": -10.01,
+        "actual_price": 16.420000076293945,
+        "diff_pct": -12.36,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00956.TW",
+        "base_price": 13.050000190734863,
+        "predicted_price": 11.75,
+        "expected_change_pct": -9.96,
+        "actual_price": 12.979999542236328,
+        "diff_pct": -9.48,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00960.TW",
+        "base_price": 16.68000030517578,
+        "predicted_price": 15.01,
+        "expected_change_pct": -10.01,
+        "actual_price": 16.829999923706055,
+        "diff_pct": -10.81,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00963.TW",
+        "base_price": 12.479999542236328,
+        "predicted_price": 11.23,
+        "expected_change_pct": -10.02,
+        "actual_price": 12.479999542236328,
+        "diff_pct": -10.02,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00964.TW",
+        "base_price": 13.890000343322754,
+        "predicted_price": 12.5,
+        "expected_change_pct": -10.01,
+        "actual_price": 14.0,
+        "diff_pct": -10.71,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "00965.TW",
+        "base_price": 25.989999771118164,
+        "predicted_price": 23.41,
+        "expected_change_pct": -9.93,
+        "actual_price": 25.860000610351562,
+        "diff_pct": -9.47,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "009802.TW",
+        "base_price": 13.430000305175781,
+        "predicted_price": 12.09,
+        "expected_change_pct": -9.98,
+        "actual_price": 13.699999809265137,
+        "diff_pct": -11.75,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "009803.TW",
+        "base_price": 15.930000305175781,
+        "predicted_price": 14.36,
+        "expected_change_pct": -9.86,
+        "actual_price": 16.3700008392334,
+        "diff_pct": -12.28,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "009804.TW",
+        "base_price": 17.399999618530273,
+        "predicted_price": 15.66,
+        "expected_change_pct": -10.0,
+        "actual_price": 17.790000915527344,
+        "diff_pct": -11.97,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1103.TW",
+        "base_price": 14.100000381469727,
+        "predicted_price": 15.5,
+        "expected_change_pct": 9.93,
+        "actual_price": 14.149999618530273,
+        "diff_pct": 9.54,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1301.TW",
+        "base_price": 48.59999847412109,
+        "predicted_price": 50.8,
+        "expected_change_pct": 4.53,
+        "actual_price": 53.400001525878906,
+        "diff_pct": -4.87,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1303.TW",
+        "base_price": 90.8000030517578,
+        "predicted_price": 84.0,
+        "expected_change_pct": -7.49,
+        "actual_price": 94.9000015258789,
+        "diff_pct": -11.49,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1309.TW",
+        "base_price": 12.25,
+        "predicted_price": 11.85,
+        "expected_change_pct": -3.27,
+        "actual_price": 12.699999809265137,
+        "diff_pct": -6.69,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1310.TW",
+        "base_price": 9.050000190734863,
+        "predicted_price": 9.96,
+        "expected_change_pct": 10.06,
+        "actual_price": 9.329999923706055,
+        "diff_pct": 6.75,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1326.TW",
+        "base_price": 44.75,
+        "predicted_price": 46.95,
+        "expected_change_pct": 4.92,
+        "actual_price": 49.20000076293945,
+        "diff_pct": -4.57,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1337.TW",
+        "base_price": 5.230000019073486,
+        "predicted_price": 4.71,
+        "expected_change_pct": -9.94,
+        "actual_price": 5.510000228881836,
+        "diff_pct": -14.52,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1402.TW",
+        "base_price": 28.200000762939453,
+        "predicted_price": 25.4,
+        "expected_change_pct": -9.93,
+        "actual_price": 28.450000762939453,
+        "diff_pct": -10.72,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1414.TW",
+        "base_price": 19.899999618530273,
+        "predicted_price": 21.9,
+        "expected_change_pct": 10.05,
+        "actual_price": 20.0,
+        "diff_pct": 9.5,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1432.TW",
+        "base_price": 18.5,
+        "predicted_price": 18.75,
+        "expected_change_pct": 1.35,
+        "actual_price": 18.0,
+        "diff_pct": 4.17,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1434.TW",
+        "base_price": 17.899999618530273,
+        "predicted_price": 19.0,
+        "expected_change_pct": 6.15,
+        "actual_price": 18.450000762939453,
+        "diff_pct": 2.98,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1454.TW",
+        "base_price": 14.149999618530273,
+        "predicted_price": 15.55,
+        "expected_change_pct": 9.89,
+        "actual_price": 14.100000381469727,
+        "diff_pct": 10.28,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1455.TW",
+        "base_price": 8.489999771118164,
+        "predicted_price": 8.89,
+        "expected_change_pct": 4.71,
+        "actual_price": 8.430000305175781,
+        "diff_pct": 5.46,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1460.TW",
+        "base_price": 6.860000133514404,
+        "predicted_price": 7.48,
+        "expected_change_pct": 9.04,
+        "actual_price": 6.789999961853027,
+        "diff_pct": 10.16,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1466.TW",
+        "base_price": 17.75,
+        "predicted_price": 16.0,
+        "expected_change_pct": -9.86,
+        "actual_price": 18.149999618530273,
+        "diff_pct": -11.85,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1471.TW",
+        "base_price": 11.300000190734863,
+        "predicted_price": 12.45,
+        "expected_change_pct": 10.18,
+        "actual_price": 12.399999618530273,
+        "diff_pct": 0.4,
+        "accuracy": "⭐⭐⭐ 準確"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1476.TW",
+        "base_price": 432.0,
+        "predicted_price": 475.0,
+        "expected_change_pct": 9.95,
+        "actual_price": 424.0,
+        "diff_pct": 12.03,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1529.TW",
+        "base_price": 24.700000762939453,
+        "predicted_price": 26.95,
+        "expected_change_pct": 9.11,
+        "actual_price": 26.549999237060547,
+        "diff_pct": 1.51,
+        "accuracy": "⭐ 普通"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1560.TW",
+        "base_price": 498.0,
+        "predicted_price": 448.0,
+        "expected_change_pct": -10.04,
+        "actual_price": 494.5,
+        "diff_pct": -9.4,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1582.TW",
+        "base_price": 69.9000015258789,
+        "predicted_price": 66.1,
+        "expected_change_pct": -5.44,
+        "actual_price": 70.0,
+        "diff_pct": -5.57,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1590.TW",
+        "base_price": 1185.0,
+        "predicted_price": 1100.0,
+        "expected_change_pct": -7.17,
+        "actual_price": 1190.0,
+        "diff_pct": -7.56,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1708.TW",
+        "base_price": 35.599998474121094,
+        "predicted_price": 32.05,
+        "expected_change_pct": -9.97,
+        "actual_price": 36.0,
+        "diff_pct": -10.97,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1711.TW",
+        "base_price": 27.799999237060547,
+        "predicted_price": 25.05,
+        "expected_change_pct": -9.89,
+        "actual_price": 26.799999237060547,
+        "diff_pct": -6.53,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1712.TW",
+        "base_price": 45.75,
+        "predicted_price": 42.0,
+        "expected_change_pct": -8.2,
+        "actual_price": 45.599998474121094,
+        "diff_pct": -7.89,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1714.TW",
+        "base_price": 9.449999809265137,
+        "predicted_price": 8.81,
+        "expected_change_pct": -6.77,
+        "actual_price": 9.930000305175781,
+        "diff_pct": -11.28,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1723.TW",
+        "base_price": 73.19999694824219,
+        "predicted_price": 69.1,
+        "expected_change_pct": -5.6,
+        "actual_price": 72.5,
+        "diff_pct": -4.69,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1795.TW",
+        "base_price": 287.5,
+        "predicted_price": 273.5,
+        "expected_change_pct": -4.87,
+        "actual_price": 284.5,
+        "diff_pct": -3.87,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "1802.TW",
+        "base_price": 56.79999923706055,
+        "predicted_price": 54.5,
+        "expected_change_pct": -4.05,
+        "actual_price": 61.29999923706055,
+        "diff_pct": -11.09,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2002.TW",
+        "base_price": 20.700000762939453,
+        "predicted_price": 20.7,
+        "expected_change_pct": -0.0,
+        "actual_price": 21.25,
+        "diff_pct": -2.59,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2006.TW",
+        "base_price": 72.69999694824219,
+        "predicted_price": 65.4,
+        "expected_change_pct": -10.04,
+        "actual_price": 73.4000015258789,
+        "diff_pct": -10.9,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2010.TW",
+        "base_price": 22.75,
+        "predicted_price": 25.05,
+        "expected_change_pct": 10.11,
+        "actual_price": 22.899999618530273,
+        "diff_pct": 9.39,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2014.TW",
+        "base_price": 18.0,
+        "predicted_price": 16.2,
+        "expected_change_pct": -10.0,
+        "actual_price": 18.799999237060547,
+        "diff_pct": -13.83,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2015.TW",
+        "base_price": 68.0999984741211,
+        "predicted_price": 64.7,
+        "expected_change_pct": -4.99,
+        "actual_price": 67.69999694824219,
+        "diff_pct": -4.43,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2020.TW",
+        "base_price": 24.200000762939453,
+        "predicted_price": 21.8,
+        "expected_change_pct": -9.92,
+        "actual_price": 24.549999237060547,
+        "diff_pct": -11.2,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2022.TW",
+        "base_price": 9.149999618530273,
+        "predicted_price": 9.99,
+        "expected_change_pct": 9.18,
+        "actual_price": 9.119999885559082,
+        "diff_pct": 9.54,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2023.TW",
+        "base_price": 14.75,
+        "predicted_price": 16.05,
+        "expected_change_pct": 8.81,
+        "actual_price": 14.800000190734863,
+        "diff_pct": 8.45,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2031.TW",
+        "base_price": 39.45000076293945,
+        "predicted_price": 42.95,
+        "expected_change_pct": 8.87,
+        "actual_price": 40.0,
+        "diff_pct": 7.38,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2032.TW",
+        "base_price": 16.100000381469727,
+        "predicted_price": 17.45,
+        "expected_change_pct": 8.39,
+        "actual_price": 16.549999237060547,
+        "diff_pct": 5.44,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2038.TW",
+        "base_price": 15.050000190734863,
+        "predicted_price": 13.4,
+        "expected_change_pct": -10.96,
+        "actual_price": 15.350000381469727,
+        "diff_pct": -12.7,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2103.TW",
+        "base_price": 19.600000381469727,
+        "predicted_price": 21.55,
+        "expected_change_pct": 9.95,
+        "actual_price": 20.799999237060547,
+        "diff_pct": 3.61,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2208.TW",
+        "base_price": 24.299999237060547,
+        "predicted_price": 26.7,
+        "expected_change_pct": 9.88,
+        "actual_price": 24.100000381469727,
+        "diff_pct": 10.79,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2236.TW",
+        "base_price": 116.0,
+        "predicted_price": 104.5,
+        "expected_change_pct": -9.91,
+        "actual_price": 115.0,
+        "diff_pct": -9.13,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2301.TW",
+        "base_price": 193.5,
+        "predicted_price": 174.0,
+        "expected_change_pct": -10.08,
+        "actual_price": 192.0,
+        "diff_pct": -9.38,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2308.TW",
+        "base_price": 1385.0,
+        "predicted_price": 1280.0,
+        "expected_change_pct": -7.58,
+        "actual_price": 1435.0,
+        "diff_pct": -10.8,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2313.TW",
+        "base_price": 225.5,
+        "predicted_price": 208.0,
+        "expected_change_pct": -7.76,
+        "actual_price": 209.5,
+        "diff_pct": -0.72,
+        "accuracy": "⭐⭐⭐ 準確"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2330.TW",
+        "base_price": 1965.0,
+        "predicted_price": 1880.0,
+        "expected_change_pct": -4.33,
+        "actual_price": 2015.0,
+        "diff_pct": -6.7,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2337.TW",
+        "base_price": 113.5,
+        "predicted_price": 99.8,
+        "expected_change_pct": -12.07,
+        "actual_price": 108.0,
+        "diff_pct": -7.59,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2345.TW",
+        "base_price": 1405.0,
+        "predicted_price": 1265.0,
+        "expected_change_pct": -9.96,
+        "actual_price": 1450.0,
+        "diff_pct": -12.76,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2347.TW",
+        "base_price": 69.80000305175781,
+        "predicted_price": 64.3,
+        "expected_change_pct": -7.88,
+        "actual_price": 70.80000305175781,
+        "diff_pct": -9.18,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2351.TW",
+        "base_price": 87.9000015258789,
+        "predicted_price": 79.1,
+        "expected_change_pct": -10.01,
+        "actual_price": 87.5,
+        "diff_pct": -9.6,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2355.TW",
+        "base_price": 41.95000076293945,
+        "predicted_price": 40.0,
+        "expected_change_pct": -4.65,
+        "actual_price": 41.04999923706055,
+        "diff_pct": -2.56,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2360.TW",
+        "base_price": 1225.0,
+        "predicted_price": 1100.0,
+        "expected_change_pct": -10.2,
+        "actual_price": 1255.0,
+        "diff_pct": -12.35,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2363.TW",
+        "base_price": 55.900001525878906,
+        "predicted_price": 49.0,
+        "expected_change_pct": -12.34,
+        "actual_price": 54.599998474121094,
+        "diff_pct": -10.26,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2367.TW",
+        "base_price": 61.20000076293945,
+        "predicted_price": 55.2,
+        "expected_change_pct": -9.8,
+        "actual_price": 58.70000076293945,
+        "diff_pct": -5.96,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2368.TW",
+        "base_price": 833.0,
+        "predicted_price": 799.0,
+        "expected_change_pct": -4.08,
+        "actual_price": 845.0,
+        "diff_pct": -5.44,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2382.TW",
+        "base_price": 284.0,
+        "predicted_price": 255.5,
+        "expected_change_pct": -10.04,
+        "actual_price": 297.5,
+        "diff_pct": -14.12,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2383.TW",
+        "base_price": 2310.0,
+        "predicted_price": 2195.0,
+        "expected_change_pct": -4.98,
+        "actual_price": 2420.0,
+        "diff_pct": -9.3,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2385.TW",
+        "base_price": 123.5,
+        "predicted_price": 111.5,
+        "expected_change_pct": -9.72,
+        "actual_price": 123.5,
+        "diff_pct": -9.72,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2393.TW",
+        "base_price": 59.900001525878906,
+        "predicted_price": 59.3,
+        "expected_change_pct": -1.0,
+        "actual_price": 58.79999923706055,
+        "diff_pct": 0.85,
+        "accuracy": "⭐⭐⭐ 準確"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2395.TW",
+        "base_price": 324.0,
+        "predicted_price": 356.5,
+        "expected_change_pct": 10.03,
+        "actual_price": 333.0,
+        "diff_pct": 7.06,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2408.TW",
+        "base_price": 298.0,
+        "predicted_price": 268.0,
+        "expected_change_pct": -10.07,
+        "actual_price": 288.0,
+        "diff_pct": -6.94,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2409.TW",
+        "base_price": 16.350000381469727,
+        "predicted_price": 18.0,
+        "expected_change_pct": 10.09,
+        "actual_price": 16.100000381469727,
+        "diff_pct": 11.8,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2426.TW",
+        "base_price": 19.700000762939453,
+        "predicted_price": 17.75,
+        "expected_change_pct": -9.9,
+        "actual_price": 19.399999618530273,
+        "diff_pct": -8.51,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2431.TW",
+        "base_price": 15.350000381469727,
+        "predicted_price": 13.8,
+        "expected_change_pct": -10.1,
+        "actual_price": 16.450000762939453,
+        "diff_pct": -16.11,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2436.TW",
+        "base_price": 60.20000076293945,
+        "predicted_price": 68.3,
+        "expected_change_pct": 13.46,
+        "actual_price": 59.900001525878906,
+        "diff_pct": 14.02,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2449.TW",
+        "base_price": 326.0,
+        "predicted_price": 293.5,
+        "expected_change_pct": -9.97,
+        "actual_price": 320.0,
+        "diff_pct": -8.28,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2454.TW",
+        "base_price": 1825.0,
+        "predicted_price": 1750.0,
+        "expected_change_pct": -4.11,
+        "actual_price": 1870.0,
+        "diff_pct": -6.42,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2455.TW",
+        "base_price": 200.0,
+        "predicted_price": 180.5,
+        "expected_change_pct": -9.75,
+        "actual_price": 198.0,
+        "diff_pct": -8.84,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2460.TW",
+        "base_price": 29.0,
+        "predicted_price": 26.15,
+        "expected_change_pct": -9.83,
+        "actual_price": 28.5,
+        "diff_pct": -8.25,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2464.TW",
+        "base_price": 73.0999984741211,
+        "predicted_price": 68.2,
+        "expected_change_pct": -6.7,
+        "actual_price": 71.19999694824219,
+        "diff_pct": -4.21,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2467.TW",
+        "base_price": 280.5,
+        "predicted_price": 283.0,
+        "expected_change_pct": 0.89,
+        "actual_price": 292.0,
+        "diff_pct": -3.08,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2483.TW",
+        "base_price": 21.149999618530273,
+        "predicted_price": 22.35,
+        "expected_change_pct": 5.67,
+        "actual_price": 22.100000381469727,
+        "diff_pct": 1.13,
+        "accuracy": "⭐ 普通"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2485.TW",
+        "base_price": 42.900001525878906,
+        "predicted_price": 38.65,
+        "expected_change_pct": -9.91,
+        "actual_price": 42.0,
+        "diff_pct": -7.98,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2486.TW",
+        "base_price": 143.0,
+        "predicted_price": 128.5,
+        "expected_change_pct": -10.14,
+        "actual_price": 139.5,
+        "diff_pct": -7.89,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2489.TW",
+        "base_price": 32.75,
+        "predicted_price": 31.45,
+        "expected_change_pct": -3.97,
+        "actual_price": 36.0,
+        "diff_pct": -12.64,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2515.TW",
+        "base_price": 18.299999237060547,
+        "predicted_price": 16.45,
+        "expected_change_pct": -10.11,
+        "actual_price": 16.649999618530273,
+        "diff_pct": -1.2,
+        "accuracy": "⭐ 普通"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2527.TW",
+        "base_price": 30.850000381469727,
+        "predicted_price": 31.15,
+        "expected_change_pct": 0.97,
+        "actual_price": 31.100000381469727,
+        "diff_pct": 0.16,
+        "accuracy": "⭐⭐⭐ 準確"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2535.TW",
+        "base_price": 74.5999984741211,
+        "predicted_price": 67.1,
+        "expected_change_pct": -10.05,
+        "actual_price": 74.0,
+        "diff_pct": -9.32,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2539.TW",
+        "base_price": 49.5,
+        "predicted_price": 44.55,
+        "expected_change_pct": -10.0,
+        "actual_price": 49.25,
+        "diff_pct": -9.54,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2605.TW",
+        "base_price": 30.899999618530273,
+        "predicted_price": 27.85,
+        "expected_change_pct": -9.87,
+        "actual_price": 32.900001525878906,
+        "diff_pct": -15.35,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2606.TW",
+        "base_price": 64.0,
+        "predicted_price": 57.7,
+        "expected_change_pct": -9.84,
+        "actual_price": 64.9000015258789,
+        "diff_pct": -11.09,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2610.TW",
+        "base_price": 21.299999237060547,
+        "predicted_price": 19.15,
+        "expected_change_pct": -10.09,
+        "actual_price": 21.100000381469727,
+        "diff_pct": -9.24,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2618.TW",
+        "base_price": 38.0,
+        "predicted_price": 34.25,
+        "expected_change_pct": -9.87,
+        "actual_price": 37.95000076293945,
+        "diff_pct": -9.75,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2645.TW",
+        "base_price": 174.0,
+        "predicted_price": 157.0,
+        "expected_change_pct": -9.77,
+        "actual_price": 174.0,
+        "diff_pct": -9.77,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2723.TW",
+        "base_price": 72.5999984741211,
+        "predicted_price": 79.9,
+        "expected_change_pct": 10.06,
+        "actual_price": 72.0,
+        "diff_pct": 10.97,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2731.TW",
+        "base_price": 176.5,
+        "predicted_price": 169.0,
+        "expected_change_pct": -4.25,
+        "actual_price": 173.0,
+        "diff_pct": -2.31,
+        "accuracy": "⭐ 普通"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2851.TW",
+        "base_price": 27.799999237060547,
+        "predicted_price": 25.05,
+        "expected_change_pct": -9.89,
+        "actual_price": 27.600000381469727,
+        "diff_pct": -9.24,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2855.TW",
+        "base_price": 30.75,
+        "predicted_price": 27.65,
+        "expected_change_pct": -10.08,
+        "actual_price": 31.5,
+        "diff_pct": -12.22,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2867.TW",
+        "base_price": 8.149999618530273,
+        "predicted_price": 8.96,
+        "expected_change_pct": 9.94,
+        "actual_price": 8.210000038146973,
+        "diff_pct": 9.14,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2880.TW",
+        "base_price": 37.349998474121094,
+        "predicted_price": 33.6,
+        "expected_change_pct": -10.04,
+        "actual_price": 37.20000076293945,
+        "diff_pct": -9.68,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2882.TW",
+        "base_price": 78.19999694824219,
+        "predicted_price": 71.0,
+        "expected_change_pct": -9.21,
+        "actual_price": 76.9000015258789,
+        "diff_pct": -7.67,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2883.TW",
+        "base_price": 20.850000381469727,
+        "predicted_price": 18.8,
+        "expected_change_pct": -9.83,
+        "actual_price": 20.899999618530273,
+        "diff_pct": -10.05,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2883B",
+        "base_price": 8.020000457763672,
+        "predicted_price": 7.22,
+        "expected_change_pct": -9.98,
+        "actual_price": 8.029999732971191,
+        "diff_pct": -10.09,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2884.TW",
+        "base_price": 34.70000076293945,
+        "predicted_price": 32.95,
+        "expected_change_pct": -5.04,
+        "actual_price": 34.95000076293945,
+        "diff_pct": -5.72,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2885.TW",
+        "base_price": 47.45000076293945,
+        "predicted_price": 42.7,
+        "expected_change_pct": -10.01,
+        "actual_price": 47.25,
+        "diff_pct": -9.63,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2887.TW",
+        "base_price": 25.299999237060547,
+        "predicted_price": 22.75,
+        "expected_change_pct": -10.08,
+        "actual_price": 24.899999618530273,
+        "diff_pct": -8.63,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2889.TW",
+        "base_price": 17.399999618530273,
+        "predicted_price": 15.65,
+        "expected_change_pct": -10.06,
+        "actual_price": 16.600000381469727,
+        "diff_pct": -5.72,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2890.TW",
+        "base_price": 32.650001525878906,
+        "predicted_price": 32.75,
+        "expected_change_pct": 0.31,
+        "actual_price": 32.75,
+        "diff_pct": 0.0,
+        "accuracy": "⭐⭐⭐ 準確"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2891.TW",
+        "base_price": 53.79999923706055,
+        "predicted_price": 48.4,
+        "expected_change_pct": -10.04,
+        "actual_price": 53.5,
+        "diff_pct": -9.53,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2892.TW",
+        "base_price": 30.0,
+        "predicted_price": 27.0,
+        "expected_change_pct": -10.0,
+        "actual_price": 29.899999618530273,
+        "diff_pct": -9.7,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "2897.TW",
+        "base_price": 9.6899995803833,
+        "predicted_price": 8.72,
+        "expected_change_pct": -10.01,
+        "actual_price": 9.720000267028809,
+        "diff_pct": -10.29,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3003.TW",
+        "base_price": 50.5,
+        "predicted_price": 55.6,
+        "expected_change_pct": 10.1,
+        "actual_price": 50.5,
+        "diff_pct": 10.1,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3006.TW",
+        "base_price": 167.0,
+        "predicted_price": 150.5,
+        "expected_change_pct": -9.88,
+        "actual_price": 159.0,
+        "diff_pct": -5.35,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3010.TW",
+        "base_price": 125.0,
+        "predicted_price": 112.5,
+        "expected_change_pct": -10.0,
+        "actual_price": 128.0,
+        "diff_pct": -12.11,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3014.TW",
+        "base_price": 121.5,
+        "predicted_price": 109.5,
+        "expected_change_pct": -9.88,
+        "actual_price": 123.5,
+        "diff_pct": -11.34,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3015.TW",
+        "base_price": 55.5,
+        "predicted_price": 50.0,
+        "expected_change_pct": -9.91,
+        "actual_price": 54.70000076293945,
+        "diff_pct": -8.59,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3017.TW",
+        "base_price": 1550.0,
+        "predicted_price": 1395.0,
+        "expected_change_pct": -10.0,
+        "actual_price": 1675.0,
+        "diff_pct": -16.72,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3023.TW",
+        "base_price": 240.5,
+        "predicted_price": 217.0,
+        "expected_change_pct": -9.77,
+        "actual_price": 244.0,
+        "diff_pct": -11.07,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3028.TW",
+        "base_price": 49.849998474121094,
+        "predicted_price": 49.45,
+        "expected_change_pct": -0.8,
+        "actual_price": 54.79999923706055,
+        "diff_pct": -9.76,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3030.TW",
+        "base_price": 203.0,
+        "predicted_price": 183.0,
+        "expected_change_pct": -9.85,
+        "actual_price": 203.5,
+        "diff_pct": -10.07,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3033.TW",
+        "base_price": 31.899999618530273,
+        "predicted_price": 28.75,
+        "expected_change_pct": -9.87,
+        "actual_price": 31.75,
+        "diff_pct": -9.45,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3036.TW",
+        "base_price": 180.5,
+        "predicted_price": 162.5,
+        "expected_change_pct": -9.97,
+        "actual_price": 183.0,
+        "diff_pct": -11.2,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3036A",
+        "base_price": 52.0,
+        "predicted_price": 46.8,
+        "expected_change_pct": -10.0,
+        "actual_price": null,
+        "diff_pct": null,
+        "accuracy": "等待資料更新"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3037.TW",
+        "base_price": 446.0,
+        "predicted_price": 401.5,
+        "expected_change_pct": -9.98,
+        "actual_price": 458.5,
+        "diff_pct": -12.43,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3042.TW",
+        "base_price": 91.5999984741211,
+        "predicted_price": 100.5,
+        "expected_change_pct": 9.72,
+        "actual_price": 92.0999984741211,
+        "diff_pct": 9.12,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3044.TW",
+        "base_price": 392.0,
+        "predicted_price": 353.5,
+        "expected_change_pct": -9.82,
+        "actual_price": 397.0,
+        "diff_pct": -10.96,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3049.TW",
+        "base_price": 9.539999961853027,
+        "predicted_price": 10.75,
+        "expected_change_pct": 12.68,
+        "actual_price": 9.489999771118164,
+        "diff_pct": 13.28,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3138.TW",
+        "base_price": 179.5,
+        "predicted_price": 162.0,
+        "expected_change_pct": -9.75,
+        "actual_price": 180.0,
+        "diff_pct": -10.0,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3167.TW",
+        "base_price": 292.0,
+        "predicted_price": 263.0,
+        "expected_change_pct": -9.93,
+        "actual_price": 295.0,
+        "diff_pct": -10.85,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3189.TW",
+        "base_price": 321.0,
+        "predicted_price": 289.5,
+        "expected_change_pct": -9.81,
+        "actual_price": 325.5,
+        "diff_pct": -11.06,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3209.TW",
+        "base_price": 36.849998474121094,
+        "predicted_price": 38.3,
+        "expected_change_pct": 3.93,
+        "actual_price": 37.04999923706055,
+        "diff_pct": 3.37,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3419.TW",
+        "base_price": 15.600000381469727,
+        "predicted_price": 17.15,
+        "expected_change_pct": 9.94,
+        "actual_price": 15.899999618530273,
+        "diff_pct": 7.86,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3437.TW",
+        "base_price": 15.850000381469727,
+        "predicted_price": 17.45,
+        "expected_change_pct": 10.09,
+        "actual_price": 15.449999809265137,
+        "diff_pct": 12.94,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3532.TW",
+        "base_price": 139.0,
+        "predicted_price": 153.0,
+        "expected_change_pct": 10.07,
+        "actual_price": 138.0,
+        "diff_pct": 10.87,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3533.TW",
+        "base_price": 1635.0,
+        "predicted_price": 1560.0,
+        "expected_change_pct": -4.59,
+        "actual_price": 1795.0,
+        "diff_pct": -13.09,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3535.TW",
+        "base_price": 105.5,
+        "predicted_price": 95.2,
+        "expected_change_pct": -9.76,
+        "actual_price": 116.0,
+        "diff_pct": -17.93,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3550.TW",
+        "base_price": 19.149999618530273,
+        "predicted_price": 17.55,
+        "expected_change_pct": -8.36,
+        "actual_price": 18.299999237060547,
+        "diff_pct": -4.1,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3576.TW",
+        "base_price": 18.299999237060547,
+        "predicted_price": 20.15,
+        "expected_change_pct": 10.11,
+        "actual_price": 20.100000381469727,
+        "diff_pct": 0.25,
+        "accuracy": "⭐⭐⭐ 準確"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3605.TW",
+        "base_price": 66.30000305175781,
+        "predicted_price": 59.7,
+        "expected_change_pct": -9.95,
+        "actual_price": 64.69999694824219,
+        "diff_pct": -7.73,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3653.TW",
+        "base_price": 2940.0,
+        "predicted_price": 2650.0,
+        "expected_change_pct": -9.86,
+        "actual_price": 3130.0,
+        "diff_pct": -15.34,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3661.TW",
+        "base_price": 3430.0,
+        "predicted_price": 3085.0,
+        "expected_change_pct": -10.06,
+        "actual_price": 3480.0,
+        "diff_pct": -11.35,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3686.TW",
+        "base_price": 19.700000762939453,
+        "predicted_price": 21.65,
+        "expected_change_pct": 9.9,
+        "actual_price": 19.600000381469727,
+        "diff_pct": 10.46,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3702.TW",
+        "base_price": 66.5999984741211,
+        "predicted_price": 60.0,
+        "expected_change_pct": -9.91,
+        "actual_price": 68.5,
+        "diff_pct": -12.41,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3711.TW",
+        "base_price": 381.5,
+        "predicted_price": 343.5,
+        "expected_change_pct": -9.96,
+        "actual_price": 389.0,
+        "diff_pct": -11.7,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "3715.TW",
+        "base_price": 145.0,
+        "predicted_price": 130.5,
+        "expected_change_pct": -10.0,
+        "actual_price": 153.0,
+        "diff_pct": -14.71,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4133.TW",
+        "base_price": 25.399999618530273,
+        "predicted_price": 27.95,
+        "expected_change_pct": 10.04,
+        "actual_price": 25.200000762939453,
+        "diff_pct": 10.91,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4532.TW",
+        "base_price": 26.049999237060547,
+        "predicted_price": 24.2,
+        "expected_change_pct": -7.1,
+        "actual_price": 25.850000381469727,
+        "diff_pct": -6.38,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4540.TW",
+        "base_price": 52.400001525878906,
+        "predicted_price": 57.6,
+        "expected_change_pct": 9.92,
+        "actual_price": 50.5,
+        "diff_pct": 14.06,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4551.TW",
+        "base_price": 124.0,
+        "predicted_price": 136.5,
+        "expected_change_pct": 10.08,
+        "actual_price": 123.5,
+        "diff_pct": 10.53,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4755.TW",
+        "base_price": 141.5,
+        "predicted_price": 127.5,
+        "expected_change_pct": -9.89,
+        "actual_price": 149.5,
+        "diff_pct": -14.72,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4904.TW",
+        "base_price": 95.5999984741211,
+        "predicted_price": 86.1,
+        "expected_change_pct": -9.94,
+        "actual_price": 94.30000305175781,
+        "diff_pct": -8.7,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4919.TW",
+        "base_price": 72.9000015258789,
+        "predicted_price": 65.8,
+        "expected_change_pct": -9.74,
+        "actual_price": 70.69999694824219,
+        "diff_pct": -6.93,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4934.TW",
+        "base_price": 18.200000762939453,
+        "predicted_price": 20.0,
+        "expected_change_pct": 9.89,
+        "actual_price": 19.0,
+        "diff_pct": 5.26,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4949.TW",
+        "base_price": 49.25,
+        "predicted_price": 46.5,
+        "expected_change_pct": -5.58,
+        "actual_price": 47.20000076293945,
+        "diff_pct": -1.48,
+        "accuracy": "⭐ 普通"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4952.TW",
+        "base_price": 44.150001525878906,
+        "predicted_price": 48.4,
+        "expected_change_pct": 9.63,
+        "actual_price": 42.099998474121094,
+        "diff_pct": 14.96,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4956.TW",
+        "base_price": 27.149999618530273,
+        "predicted_price": 24.45,
+        "expected_change_pct": -9.94,
+        "actual_price": 25.799999237060547,
+        "diff_pct": -5.23,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4958.TW",
+        "base_price": 211.5,
+        "predicted_price": 190.5,
+        "expected_change_pct": -9.93,
+        "actual_price": 205.5,
+        "diff_pct": -7.3,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "4977.TW",
+        "base_price": 143.5,
+        "predicted_price": 129.5,
+        "expected_change_pct": -9.76,
+        "actual_price": 157.5,
+        "diff_pct": -17.78,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "5234.TW",
+        "base_price": 441.0,
+        "predicted_price": 397.0,
+        "expected_change_pct": -9.98,
+        "actual_price": 450.0,
+        "diff_pct": -11.78,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "5388.TW",
+        "base_price": 83.4000015258789,
+        "predicted_price": 91.7,
+        "expected_change_pct": 9.95,
+        "actual_price": 82.9000015258789,
+        "diff_pct": 10.62,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "5471.TW",
+        "base_price": 42.75,
+        "predicted_price": 38.55,
+        "expected_change_pct": -9.82,
+        "actual_price": 42.400001525878906,
+        "diff_pct": -9.08,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "5871.TW",
+        "base_price": 106.5,
+        "predicted_price": 117.0,
+        "expected_change_pct": 9.86,
+        "actual_price": 105.5,
+        "diff_pct": 10.9,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "5907.TW",
+        "base_price": 5.929999828338623,
+        "predicted_price": 6.52,
+        "expected_change_pct": 9.95,
+        "actual_price": 5.920000076293945,
+        "diff_pct": 10.14,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6005.TW",
+        "base_price": 30.899999618530273,
+        "predicted_price": 27.8,
+        "expected_change_pct": -10.03,
+        "actual_price": 31.25,
+        "diff_pct": -11.04,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6024.TW",
+        "base_price": 52.5,
+        "predicted_price": 47.3,
+        "expected_change_pct": -9.9,
+        "actual_price": 52.70000076293945,
+        "diff_pct": -10.25,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6152.TW",
+        "base_price": 15.149999618530273,
+        "predicted_price": 13.65,
+        "expected_change_pct": -9.9,
+        "actual_price": 16.649999618530273,
+        "diff_pct": -18.02,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6176.TW",
+        "base_price": 132.5,
+        "predicted_price": 119.0,
+        "expected_change_pct": -10.19,
+        "actual_price": 135.5,
+        "diff_pct": -12.18,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6189.TW",
+        "base_price": 46.79999923706055,
+        "predicted_price": 42.2,
+        "expected_change_pct": -9.83,
+        "actual_price": 46.29999923706055,
+        "diff_pct": -8.86,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6192.TW",
+        "base_price": 124.0,
+        "predicted_price": 112.0,
+        "expected_change_pct": -9.68,
+        "actual_price": 128.5,
+        "diff_pct": -12.84,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6197.TW",
+        "base_price": 148.0,
+        "predicted_price": 133.5,
+        "expected_change_pct": -9.8,
+        "actual_price": 150.5,
+        "diff_pct": -11.3,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6202.TW",
+        "base_price": 62.79999923706055,
+        "predicted_price": 69.1,
+        "expected_change_pct": 10.03,
+        "actual_price": 62.0,
+        "diff_pct": 11.45,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6206.TW",
+        "base_price": 94.4000015258789,
+        "predicted_price": 96.0,
+        "expected_change_pct": 1.69,
+        "actual_price": 94.19999694824219,
+        "diff_pct": 1.91,
+        "accuracy": "⭐ 普通"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6213.TW",
+        "base_price": 133.5,
+        "predicted_price": 120.5,
+        "expected_change_pct": -9.74,
+        "actual_price": 146.5,
+        "diff_pct": -17.75,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6269.TW",
+        "base_price": 65.4000015258789,
+        "predicted_price": 71.9,
+        "expected_change_pct": 9.94,
+        "actual_price": 65.5999984741211,
+        "diff_pct": 9.6,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6271.TW",
+        "base_price": 172.0,
+        "predicted_price": 155.0,
+        "expected_change_pct": -9.88,
+        "actual_price": 189.0,
+        "diff_pct": -17.99,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6285.TW",
+        "base_price": 188.5,
+        "predicted_price": 170.0,
+        "expected_change_pct": -9.81,
+        "actual_price": 190.0,
+        "diff_pct": -10.53,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6405.TW",
+        "base_price": 32.349998474121094,
+        "predicted_price": 35.6,
+        "expected_change_pct": 10.05,
+        "actual_price": 34.900001525878906,
+        "diff_pct": 2.01,
+        "accuracy": "⭐ 普通"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6415.TW",
+        "base_price": 285.0,
+        "predicted_price": 256.5,
+        "expected_change_pct": -10.0,
+        "actual_price": 279.0,
+        "diff_pct": -8.06,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6426.TW",
+        "base_price": 185.0,
+        "predicted_price": 167.0,
+        "expected_change_pct": -9.73,
+        "actual_price": 177.0,
+        "diff_pct": -5.65,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6442.TW",
+        "base_price": 2030.0,
+        "predicted_price": 1830.0,
+        "expected_change_pct": -9.85,
+        "actual_price": 2080.0,
+        "diff_pct": -12.02,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6446.TW",
+        "base_price": 731.0,
+        "predicted_price": 659.0,
+        "expected_change_pct": -9.85,
+        "actual_price": 747.0,
+        "diff_pct": -11.78,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6451.TW",
+        "base_price": 200.5,
+        "predicted_price": 180.5,
+        "expected_change_pct": -9.98,
+        "actual_price": 211.0,
+        "diff_pct": -14.45,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6472.TW",
+        "base_price": 520.0,
+        "predicted_price": 468.0,
+        "expected_change_pct": -10.0,
+        "actual_price": 510.0,
+        "diff_pct": -8.24,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6515.TW",
+        "base_price": 4765.0,
+        "predicted_price": 4295.0,
+        "expected_change_pct": -9.86,
+        "actual_price": 5000.0,
+        "diff_pct": -14.1,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6526.TW",
+        "base_price": 465.0,
+        "predicted_price": 512.0,
+        "expected_change_pct": 10.11,
+        "actual_price": 470.0,
+        "diff_pct": 8.94,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6691.TW",
+        "base_price": 618.0,
+        "predicted_price": 557.0,
+        "expected_change_pct": -9.87,
+        "actual_price": 621.0,
+        "diff_pct": -10.31,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6753.TW",
+        "base_price": 157.0,
+        "predicted_price": 141.5,
+        "expected_change_pct": -9.87,
+        "actual_price": 152.0,
+        "diff_pct": -6.91,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6770.TW",
+        "base_price": 73.69999694824219,
+        "predicted_price": 66.4,
+        "expected_change_pct": -9.91,
+        "actual_price": 76.80000305175781,
+        "diff_pct": -13.54,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6789.TW",
+        "base_price": 303.0,
+        "predicted_price": 333.5,
+        "expected_change_pct": 10.07,
+        "actual_price": 311.0,
+        "diff_pct": 7.23,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6830.TW",
+        "base_price": 236.0,
+        "predicted_price": 212.5,
+        "expected_change_pct": -9.96,
+        "actual_price": 259.5,
+        "diff_pct": -18.11,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6861.TW",
+        "base_price": 94.80000305175781,
+        "predicted_price": 88.6,
+        "expected_change_pct": -6.54,
+        "actual_price": 104.0,
+        "diff_pct": -14.81,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6873.TW",
+        "base_price": 108.0,
+        "predicted_price": 119.0,
+        "expected_change_pct": 10.19,
+        "actual_price": 110.0,
+        "diff_pct": 8.18,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6919.TW",
+        "base_price": 163.5,
+        "predicted_price": 147.0,
+        "expected_change_pct": -10.09,
+        "actual_price": 161.5,
+        "diff_pct": -8.98,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "6949.TW",
+        "base_price": 690.0,
+        "predicted_price": 621.0,
+        "expected_change_pct": -10.0,
+        "actual_price": 690.0,
+        "diff_pct": -10.0,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "7780.TW",
+        "base_price": 25.399999618530273,
+        "predicted_price": 22.85,
+        "expected_change_pct": -10.04,
+        "actual_price": 24.899999618530273,
+        "diff_pct": -8.23,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "7795.TW",
+        "base_price": 415.0,
+        "predicted_price": 373.5,
+        "expected_change_pct": -10.0,
+        "actual_price": 415.0,
+        "diff_pct": -10.0,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8033.TW",
+        "base_price": 162.5,
+        "predicted_price": 146.5,
+        "expected_change_pct": -9.85,
+        "actual_price": 159.0,
+        "diff_pct": -7.86,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8045.TW",
+        "base_price": 85.0999984741211,
+        "predicted_price": 76.7,
+        "expected_change_pct": -9.87,
+        "actual_price": 82.0,
+        "diff_pct": -6.46,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8046.TW",
+        "base_price": 503.0,
+        "predicted_price": 469.5,
+        "expected_change_pct": -6.66,
+        "actual_price": 553.0,
+        "diff_pct": -15.1,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8081.TW",
+        "base_price": 247.0,
+        "predicted_price": 222.5,
+        "expected_change_pct": -9.92,
+        "actual_price": 246.0,
+        "diff_pct": -9.55,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8103.TW",
+        "base_price": 93.30000305175781,
+        "predicted_price": 84.0,
+        "expected_change_pct": -9.97,
+        "actual_price": 96.69999694824219,
+        "diff_pct": -13.13,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8210.TW",
+        "base_price": 870.0,
+        "predicted_price": 784.0,
+        "expected_change_pct": -9.89,
+        "actual_price": 909.0,
+        "diff_pct": -13.75,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8213.TW",
+        "base_price": 37.400001525878906,
+        "predicted_price": 33.65,
+        "expected_change_pct": -10.03,
+        "actual_price": 38.099998474121094,
+        "diff_pct": -11.68,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8215.TW",
+        "base_price": 21.149999618530273,
+        "predicted_price": 23.25,
+        "expected_change_pct": 9.93,
+        "actual_price": 20.799999237060547,
+        "diff_pct": 11.78,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8249.TW",
+        "base_price": 61.099998474121094,
+        "predicted_price": 57.5,
+        "expected_change_pct": -5.89,
+        "actual_price": 60.099998474121094,
+        "diff_pct": -4.33,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8271.TW",
+        "base_price": 122.5,
+        "predicted_price": 110.5,
+        "expected_change_pct": -9.8,
+        "actual_price": 119.5,
+        "diff_pct": -7.53,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8464.TW",
+        "base_price": 410.5,
+        "predicted_price": 370.0,
+        "expected_change_pct": -9.87,
+        "actual_price": 419.5,
+        "diff_pct": -11.8,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8926.TW",
+        "base_price": 46.599998474121094,
+        "predicted_price": 41.95,
+        "expected_change_pct": -9.98,
+        "actual_price": 47.0,
+        "diff_pct": -10.74,
+        "accuracy": "❌ 失準"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "8996.TW",
+        "base_price": 931.0,
+        "predicted_price": 904.0,
+        "expected_change_pct": -2.9,
+        "actual_price": 911.0,
+        "diff_pct": -0.77,
+        "accuracy": "⭐⭐⭐ 準確"
+    },
+    {
+        "date": "2026-02-25",
+        "ticker": "9103.TW",
+        "base_price": 5.050000190734863,
+        "predicted_price": 4.54,
+        "expected_change_pct": -10.1,
+        "actual_price": 5.550000190734863,
+        "diff_pct": -18.2,
+        "accuracy": "❌ 失準"
     }
 ]

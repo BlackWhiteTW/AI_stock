@@ -474,6 +474,8 @@ class AIService:
             patience_counter = 0
             
             start_time = time.time()
+            actual_epochs = 0
+            stop_reason = "(Max epochs reached)"
             
             for epoch in range(num_epochs):
                 actual_epochs = epoch + 1
@@ -575,7 +577,8 @@ class AIService:
                             patience_counter += 1
                         
                         if patience_counter >= max(5, patience // 5):
-                            print(f"  🛑 提前停止：驗證損失在 {patience} 輪內未改善")
+                            stop_reason = f"(Early stopping: {patience} epochs without improvement)"
+                            print(f"  🛑 Early stopping: {patience} epochs without improvement")
                             break
                 else:
                     val_loss = val_losses[-1] if val_losses else train_loss
@@ -600,9 +603,10 @@ class AIService:
             
             # 更新中繼資料與緩存
             final_val_loss = val_losses[-1] if val_losses else 0
+            final_train_loss = train_losses[-1] if train_losses else 0
             self.models[ticker] = {
                 "last_loss": final_val_loss,
-                "train_loss": train_losses[-1] if train_losses else 0,
+                "train_loss": final_train_loss,
                 "best_val_loss": best_val_loss
             }
             
@@ -624,13 +628,13 @@ class AIService:
             if final_train_loss > 0:
                 overfit_ratio = final_val_loss / final_train_loss
                 if overfit_ratio > 1.5:
-                    overfit_status = f"⚠️ 驗證Loss是訓練Loss的 {overfit_ratio:.1f}x（可能欠擬合）"
+                    overfit_status = f"⚠️ Overfit ratio {overfit_ratio:.1f}x (Potential Underfitting)"
                 elif overfit_ratio > 1.2:
-                    overfit_status = f"✅ 驗證Loss是訓練Loss的 {overfit_ratio:.1f}x（輕微泛化差距，正常）"
+                    overfit_status = f"✅ Overfit ratio {overfit_ratio:.1f}x (Slight gap, normal)"
                 elif overfit_ratio >= 0.9:
-                    overfit_status = f"✅ 驗證Loss是訓練Loss的 {overfit_ratio:.2f}x（良好泛化）"
+                    overfit_status = f"✅ Overfit ratio {overfit_ratio:.2f}x (Good generalization)"
                 else:
-                    overfit_status = f"⚠️ 驗證Loss是訓練Loss的 {overfit_ratio:.2f}x（異常，可能數據問題）"
+                    overfit_status = f"⚠️ Overfit ratio {overfit_ratio:.2f}x (Abnormal, data issue?)"
             else:
                 overfit_status = "N/A"
             
@@ -638,15 +642,15 @@ class AIService:
             if transfer_learning_used:
                 unfreeze_epoch = 40 if high_volatility else 30
                 if actual_epochs > unfreeze_epoch:
-                    transfer_info = f"\n- 🚀 遷移學習: 已啟用（前{unfreeze_epoch}輪凍結GRU，後{actual_epochs-unfreeze_epoch}輪全面微調）"
+                    transfer_info = f"\n- 🚀 Transfer Learning: Enabled (Frozen first {unfreeze_epoch} epochs, then fine-tuned)"
                 else:
-                    transfer_info = "\n- 🚀 遷移學習: 已啟用（FC層微調階段）"
+                    transfer_info = "\n- 🚀 Transfer Learning: Enabled (Fine-tuning FC layers)"
             else:
                 transfer_info = ""
 
-            return f"{backtest_msg}\n\n🧠 **深度學習模型訓練完成！**\n- 運算裝置: {device_name}\n- 模型架構: PyTorch {model_type} (Features={input_dim}, Hidden={hidden_dim}, Layers={num_layers}){transfer_info}\n- 實際訓練輪數: {actual_epochs}/{num_epochs} {stop_reason}\n- 訓練耗時: {training_time:.2f} 秒\n- 訓練集 Loss: {final_train_loss:.6f}\n- 驗證集 Loss: {final_val_loss:.6f}\n- 最佳驗證 Loss: {best_val_loss:.6f}\n- 泛化能力: {overfit_status}\n- AI 模型已自動儲存至硬碟，重啟後不遺失。", final_val_loss
+            return f"{backtest_msg}\n\n🧠 **Deep Learning Model Training Complete!**\n- Device: {device_name}\n- Architecture: PyTorch {model_type} (Features={input_dim}, Hidden={hidden_dim}, Layers={num_layers}){transfer_info}\n- Actual Epochs: {actual_epochs}/{num_epochs} {stop_reason}\n- Training Time: {training_time:.2f} s\n- Train Loss: {final_train_loss:.6f}\n- Val Loss: {final_val_loss:.6f}\n- Best Val Loss: {best_val_loss:.6f}\n- Overfit Status: {overfit_status}\n- Model saved to disk.", final_val_loss
         except Exception as e:
-            return f"❌ 訓練失敗: {str(e)}", 0
+            return f"❌ Training Failed: {str(e)}", 0
     
     def train_base_model(self, stock_list=None, progress_callback=None, enhanced=True):
         """訓練遷移學習的基礎模型（增強版）

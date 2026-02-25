@@ -8,7 +8,7 @@ data/transaction_cache/*.json
 data/stock_data/*.csv
 
 # 屏蔽日誌檔案
-data/*
+data/
 
 # python 虛擬環境
 venv/*
