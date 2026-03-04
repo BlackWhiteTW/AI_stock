@@ -6,6 +6,7 @@ import datetime
 from core.trader import PaperAccount
 from ai_advisor import AIAdvisor
 from core.auto_trader import AutoTrader
+from core.auto_trader_v2 import AutoTraderV2
 from jobs.daily_job import run_daily_job, run_morning_job
 
 # 導入 UI 模組
@@ -70,7 +71,10 @@ ai_advisor = st.session_state.ai_advisor
 
 if 'auto_trader' not in st.session_state:
     st.session_state.auto_trader = AutoTrader()
-trader_bot = st.session_state.auto_trader
+if 'auto_trader_v2' not in st.session_state:
+    st.session_state.auto_trader_v2 = AutoTraderV2(account_file='data/ai_account_v2.json')
+trader_bot_v1 = st.session_state.auto_trader
+trader_bot_v2 = st.session_state.auto_trader_v2
 
 if 'user_watchlist' not in st.session_state:
     st.session_state.user_watchlist = {}
@@ -119,7 +123,14 @@ with tab5:
 
 # Tab 6: AI 自動化股票交易 (包含 AI 採購中心/Scanner)
 with tab6:
-    render_tab_battle(trader_bot, symbol, hist_data, df_stocks, ai_advisor)
+    render_tab_battle(
+        trader_bot_v1=trader_bot_v1, 
+        trader_bot_v2=trader_bot_v2, 
+        symbol=symbol, 
+        hist_data=hist_data, 
+        df_stocks=df_stocks, 
+        ai_advisor=ai_advisor
+    )
 
 # Tab 7: AI 模型訓練中心 (🆕 專業訓練管理)
 with tab7:

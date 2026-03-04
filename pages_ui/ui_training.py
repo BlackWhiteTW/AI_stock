@@ -1,28 +1,27 @@
-"""
-AI 模型訓練中心 UI
-專門用於管理和執行 AI 模型訓練任務
-"""
-import pandas as pd
 import streamlit as st
+import pandas as pd
 import time
 import os
 import json
-from services.ai_service import AIService
+import subprocess
 from datetime import datetime
-
-# 為了避免循環引用，建議在函式內部 import StockStrategy，
-# 但若結構允許，也可以放在這裡。這裡保持動態 import 以確保安全。
+from services.ai_service import AIService
+from services.gnn_service import GNNService
+from services.stock_strategy import StockStrategy
+from utils import get_stock_data, get_tw_stock_list
 
 def render_tab_training(ai_advisor):
+    # ... (其餘 UI 邏輯保持不變)
     """渲染 AI 模型訓練中心頁面"""
     
     st.header("🎓 AI 模型訓練中心")
     st.caption("管理和訓練 AI 深度學習模型，提升股票預測準確度")
     
-    # 創建子分頁（4個）
-    training_tab1, training_tab2, training_tab3, training_tab4 = st.tabs([
+    # 創建子分頁（5個）
+    training_tab1, training_tab2, training_tab3, training_tab4, training_tab5 = st.tabs([
         "🚀 主模型訓練",
-        "📈 個股模型訓練", 
+        "📈 個股模型訓練 (LSTM)", 
+        "🕸️ 市場關係訓練 (GNN)",
         "📦 批量訓練",
         "📊 訓練歷史與統計"
     ])
@@ -34,14 +33,78 @@ def render_tab_training(ai_advisor):
     # ===== Tab 2: 個股模型訓練 =====
     with training_tab2:
         render_stock_model_training(ai_advisor)
-    
-    # ===== Tab 3: 批量訓練 =====
+
+    # ===== Tab 3: GNN 市場關係訓練 =====
     with training_tab3:
+        render_gnn_training()
+    
+    # ===== Tab 4: 批量訓練 =====
+    with training_tab4:
         render_batch_training(ai_advisor)
     
-    # ===== Tab 4: 訓練歷史 =====
-    with training_tab4:
+    # ===== Tab 5: 訓練歷史 =====
+    with training_tab5:
         render_training_history()
+
+def render_gnn_training():
+    """GNN 市場關係訓練介面"""
+    st.subheader("🕸️ GNN 市場聯動關係訓練")
+    st.markdown("""
+    **圖神經網路 (GNN)** 用於捕捉股票之間的「群體效應」：
+    - 💎 **產業聯動**：同一產業的股票通常會一起漲跌。
+    - 🔗 **關係權重**：自動學習哪些股票是市場的領頭羊。
+    - 📊 **全局預測**：不再孤立看單一股票，而是看整個市場圖譜。
+    """)
+    
+    from services.gnn_service import GNNService
+    gnn_service = GNNService()
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.info("💡 GNN 會根據『產業分類』將股票連接成網路，並學習節點間的特徵傳遞。")
+        scope = st.selectbox("訓練範圍 (Market Scope)", ["精選前 100 支", "熱門前 500 支", "全市場級別 (所有上市櫃)"])
+        epochs = st.slider("訓練輪數 (Epochs)", 50, 500, 100)
+    
+    with col2:
+        # 檢查 GNN 模型狀態
+        if os.path.exists(gnn_service.model_path):
+            stat = os.stat(gnn_service.model_path)
+            mtime = datetime.fromtimestamp(stat.st_mtime)
+            st.success(f"✅ GNN 模型已就緒")
+            st.metric("最後更新", mtime.strftime('%Y-%m-%d %H:%M'))
+            st.metric("模型大小", f"{stat.st_size / 1024:.1f} KB")
+        else:
+            st.warning("⚠️ 尚未訓練市場 GNN 模型")
+            st.info("建議先進行全市場關係訓練，以輔助 LSTM 選股。")
+
+    if st.button("🚀 啟動市場關係訓練 (GNN)", type="primary"):
+        with st.spinner(f"正在分析 {scope} 數據並構建圖結構..."):
+            try:
+                df_stocks = get_tw_stock_list()
+                if scope == "精選前 100 支":
+                    tickers = df_stocks['Ticker'].head(100).tolist()
+                elif scope == "熱門前 500 支":
+                    tickers = df_stocks['Ticker'].head(500).tolist()
+                else:
+                    tickers = df_stocks['Ticker'].tolist()
+                
+                result = gnn_service.train_market_gnn(tickers=tickers, epochs=epochs)
+                st.success(result)
+                st.balloons()
+            except Exception as e:
+                st.error(f"GNN 訓練失敗: {e}")
+
+    # 預覽功能
+    if os.path.exists(gnn_service.model_path):
+        if st.button("🔍 預覽 GNN 市場關係預測"):
+            with st.spinner("正在提取圖特徵進行推論..."):
+                preds = gnn_service.predict_market_relations()
+                if isinstance(preds, dict):
+                    st.write("📈 **GNN 預測明日最強勢標的 (前 10 名)：**")
+                    # 排序並顯示
+                    sorted_preds = sorted(preds.items(), key=lambda x: x[1], reverse=True)
+                    df_preds = pd.DataFrame(sorted_preds[:10], columns=['股票', '預計強度 (GNN)'])
+                    st.table(df_preds)
 
 
 def render_base_model_training():
@@ -154,27 +217,30 @@ def render_base_model_training():
             training_logs = []
             
             # 訓練進度回調
-            def progress_callback(current, total, loss, elapsed):
-                # 數據收集階段（前30%）
-                if current <= total:
+            def progress_callback(current, total, loss, elapsed, ticker=None):
+                # 數據收集階段 (Loss 為 0 且在第一階段)
+                if loss <= 0:
                     progress = (current / total) * 0.3
                     progress_bar.progress(min(progress, 0.3))
-                    status_text.text(f"📥 數據收集中: {current}/{total} 支標的...")
                     
-                    log_msg = f"[{datetime.now().strftime('%H:%M:%S')}] 正在下載第 {current}/{total} 支標的數據..."
-                    training_logs.append(log_msg)
-                    log_text.text("\n".join(training_logs[-20:]))  # 顯示最後20條
+                    ticker_display = f" ({ticker})" if ticker else ""
+                    status_text.text(f"📥 數據收集中: {current}/{total} 支標的{ticker_display}...")
+
+                    log_msg = f"[{datetime.now().strftime('%H:%M:%S')}] 正在下載第 {current}/{total} 支標的數據{ticker_display}..."
+                    if not training_logs or log_msg != training_logs[-1]:
+                        training_logs.append(log_msg)
+                        log_text.text("\n".join(training_logs[-20:]))
                 else:
                     # 訓練階段（30%-100%）
-                    progress = 0.3 + (0.7 * min(current / total, 1.0))
+                    progress = 0.3 + (0.7 * (current / total))
                     progress_bar.progress(min(progress, 1.0))
-                    status_text.text(f"🧠 神經網絡訓練中...")
-                    stats_text.text(f"Epoch 進度 | Loss: {loss:.6f} | 耗時: {elapsed:.1f}s")
-                    
+                    status_text.text(f"🧠 神經網絡訓練中 (第 {current}/{total} 輪)...")
+                    stats_text.text(f"訓練進度 | Loss: {loss:.6f} | 預計還需: {int((total-current)*1.2)}s")
+
                     log_msg = f"[{datetime.now().strftime('%H:%M:%S')}] Epoch {current}/{total} - Loss: {loss:.6f}"
-                    training_logs.append(log_msg)
-                    log_text.text("\n".join(training_logs[-20:]))
-            
+                    if not training_logs or log_msg != training_logs[-1]:
+                        training_logs.append(log_msg)
+                        log_text.text("\n".join(training_logs[-20:]))
             try:
                 # 開始訓練
                 mode_text = "增強版" if enhanced else "標準版"
@@ -215,12 +281,12 @@ def render_base_model_training():
                         st.metric("訓練模式", mode_text)
                     with col2:
                         if enhanced:
-                            st.metric("標的數量", "~25 支")
+                            st.metric("標的數量", "200 支")
                         else:
-                            st.metric("標的數量", "8 支")
+                            st.metric("標的數量", "30 支")
                     with col3:
                         if enhanced:
-                            st.metric("歷史數據", "~5000 天")
+                            st.metric("歷史數據", "5000+ 天")
                         else:
                             st.metric("歷史數據", "~2000 天")
                     with col4:

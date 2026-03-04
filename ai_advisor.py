@@ -5,31 +5,26 @@ from services.stock_strategy import StockStrategy
 from services import tech_analysis
 
 class AIAdvisor:
+    """
+    AI 投資顧問核心類別
+    整合 AIService (LSTM), NewsAnalyzer, 與 StockStrategy
+    """
     def __init__(self):
-        # 初始化各個子模組
         self.news_analyzer = NewsAnalyzer()
         self.service = AIService()
-        # 將策略物件與服務共享 (若需要)
-        # 這裡我們確保 Service 用的是同一個 strategy 實例，以便共享 learned_params
         self.strategy = self.service.strategy 
 
-    # --- 屬性代理 (Property Proxy) ---
-    # 讓外部 UI 能夠像以前一樣訪問這兩個變數
     @property
-    def models(self):
-        return self.service.models
+    def models(self): return self.service.models
         
     @property
-    def learned_params(self):
-        return self.strategy.learned_params
+    def learned_params(self): return self.strategy.learned_params
 
     @property
-    def prediction_file(self):
-        return self.service.prediction_file
+    def prediction_file(self): return self.service.prediction_file
 
     @property
-    def model_dir(self):
-        return self.service.model_dir
+    def model_dir(self): return self.service.model_dir
 
     # --- 功能代理 (Method Proxy) ---
 

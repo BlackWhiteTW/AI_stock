@@ -1,14 +1,14 @@
 # 屏蔽 .env 檔案，避免敏感資訊洩漏
 .env
 
-# 屏蔽股票數據和指標快取檔案
+# 屏蔽資料內容 避免過多檔案
+data/financial_data/*
 data/indicator_cache/*.pkl
 data/news_cache/*.json
-data/transaction_cache/*.json
+data/saved_models/*
 data/stock_data/*.csv
-
-# 屏蔽日誌檔案
-data/
+data/transaction_cache/*.json
+data/yahoo_tw_cache/*.json
 
 # python 虛擬環境
 venv/*
@@ -19,6 +19,3 @@ __pycache__/
 # 測試相關檔案
 tests/__pycache__/
 tests/*
-
-# 模型 請自己訓練 通常 200 - 300 即可 設備優良可全跑
-data/saved_models/*.pth

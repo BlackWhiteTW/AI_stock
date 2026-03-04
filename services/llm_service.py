@@ -14,26 +14,62 @@ except:
 class LLMService:
     def __init__(self, api_key=None):
         # 安全地獲取 API Key
-        self.api_key = api_key or os.getenv("GEMINI_API_KEY")
+        self.api_key = api_key or os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_GEMINI_API_KEY")
         
-        # 如果環境變數沒抓到，再嘗試從 st.secrets 抓取 (避免報錯)
         if not self.api_key:
             try:
                 self.api_key = st.secrets.get("GEMINI_API_KEY")
             except:
                 self.api_key = None
                 
-        self.model_name = "gemini-1.5-flash"
+        self.model = None
+        self.model_name = "未選定"
         
         if self.api_key:
             try:
+                # 診斷 API Key 狀態
+                print(f"📡 正在使用 API Key 初始化 (長度: {len(self.api_key)})")
                 genai.configure(api_key=self.api_key)
-                self.model = genai.GenerativeModel(self.model_name)
+                
+                # 🚀 智能模型偵測機制：解決 404 問題
+                available_models = []
+                try:
+                    for m in genai.list_models():
+                        if 'generateContent' in m.supported_generation_methods:
+                            available_models.append(m.name)
+                except Exception as e:
+                    print(f"無法獲取模型清單: {e}")
+                
+                # 🚀 2026 智能降級策略：優先最強，Flash 保底確保可用性
+                priority_list = [
+                    "models/gemini-3.1-pro-preview", # 1. 巔峰推理 (若有額度)
+                    "models/gemini-2.5-pro",         # 2. 穩定高階 (若有額度)
+                    "models/gemini-2.5-flash",       # 3. 高速優質 (最佳平衡)
+                    "models/gemini-2.0-flash",       # 4. 次世代快速
+                ]
+                
+                selected_model = None
+                for p in priority_list:
+                    if p in available_models:
+                        selected_model = p
+                        break
+                
+                # 如果優先名單都沒有，選第一個可用的
+                if not selected_model and available_models:
+                    selected_model = available_models[0]
+                
+                if selected_model:
+                    self.model_name = selected_model
+                    self.model = genai.GenerativeModel(selected_model)
+                    print(f"✅ 已成功載入 Gemini 模型: {selected_model}")
+                else:
+                    print("❌ 找不到任何支援生成內容的 Gemini 模型")
+                    
             except Exception as e:
                 print(f"Gemini 配置失敗: {e}")
                 self.model = None
         else:
-            self.model = None
+            print("⚠️ 找不到 API Key，LLM 服務已停用")
 
     def generate_stock_analysis(self, stock_info, technical_data, fundamental_data, news_summary):
         """

@@ -2,14 +2,17 @@ import streamlit as st
 import pandas as pd
 import os
 import time
+import random
 import yfinance as yf
 from services.market_data import MarketDataManager
+from services.news_analyzer import NewsAnalyzer
 
 # 初始化數據管理器
 data_manager = MarketDataManager()
 
-@st.cache_data(ttl=3600*12, show_spinner=False) # 12小時快取
+@st.cache_data(ttl=3600*12, show_spinner=False)
 def get_tw_stock_list():
+    # ... (其餘邏輯保持不變)
     """獲取台股清單 (優化版 - 添加快取)"""
     csv_path = "data/tw_stock_list.csv"
     load_from_file = False

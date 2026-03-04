@@ -538,57 +538,89 @@ class NewsAnalyzer:
         Returns:
             產業名稱（如："半導體"、"AI" 等）或 None
         """
-        # 根據股票代碼或名稱判斷產業
+        # 1. 優先嘗試從 tw_stock_list.csv 讀取精確產業
+        try:
+            # 移除 .TW 或 .TWO 後綴以便比對
+            code = ticker.split('.')[0]
+            
+            # 尋找 CSV 檔案 (嘗試多個可能路徑)
+            paths = ["data/tw_stock_list.csv", "tw_stock_list.csv"]
+            for path in paths:
+                if os.path.exists(path):
+                    import pandas as pd
+                    df = pd.read_csv(path)
+                    # 確保代碼欄位存在且為字串
+                    if '代碼' in df.columns:
+                        df['代碼'] = df['代碼'].astype(str)
+                        row = df[df['代碼'] == code]
+                        if not row.empty and '產業' in row.columns:
+                            exact_industry = row.iloc[0]['產業']
+                            
+                            # 映射到我們支援的 8 大國際產業分類
+                            mapping = {
+                                "半導體業": "半導體",
+                                "電腦及週邊設備業": "AI",
+                                "通信網路業": "5G",
+                                "電子零組件業": "AI",
+                                "光電業": "光電",
+                                "其他電子業": "AI",
+                                "電子通路業": "AI",
+                                "資訊服務業": "AI",
+                                "生技醫療業": "生技",
+                                "電機機械": "電動車", # 許多電機股轉向電動車
+                                "汽車工業": "電動車",
+                                "油電燃氣業": "綠能"
+                            }
+                            
+                            if exact_industry in mapping:
+                                return mapping[exact_industry]
+                            
+                            # 如果是 ETF
+                            if exact_industry == "ETF":
+                                # 根據名稱猜測 ETF 類型
+                                if "半導體" in stock_name: return "半導體"
+                                if "AI" in stock_name or "科技" in stock_name: return "AI"
+                                if "綠能" in stock_name or "能源" in stock_name: return "綠能"
+                                if "生技" in stock_name: return "生技"
+                                return "AI" # 預設 AI (熱門 ETF 多為科技類)
+                            
+                            # 如果是其他產業，回傳名稱本身，後續嘗試關鍵詞匹配
+                            break
+        except Exception:
+            pass
+
+        # 2. 既有的寫死映射 (作為快速備案)
         industry_mapping = {
-            # 台股半導體
-            "2330": "半導體",  # 台積電
-            "2454": "半導體",  # 聯發科
-            "2379": "半導體",  # 瑞昱
-            "3034": "半導體",  # 聯詠
-            "3661": "半導體",  # 世芯-KY
-            "2303": "半導體",  # 聯電
-            "6770": "半導體",  # 力積電
-            "3711": "記憶體",  # 日月光投控
-            "2337": "記憶體",  # 旺宏
-            "2344": "記憶體",  # 華邦電
-            
-            # 光電
-            "3008": "光電",    # 大立光
-            "2409": "光電",    # 友達
-            "2301": "光電",    # 光寶科
-            
-            # AI 與伺服器
-            "2382": "AI",      # 廣達
-            "2357": "AI",      # 華碩
-            "6269": "AI",      # 台郡
-            
-            # 電動車
-            "2308": "電動車",  # 台達電
-            "1513": "電動車",  # 中興電
-            "2327": "電動車",  # 國巨
+            "2330": "半導體", "2454": "半導體", "2379": "半導體",
+            "3034": "半導體", "3661": "半導體", "2303": "半導體",
+            "6770": "半導體", "3711": "記憶體", "2337": "記憶體",
+            "2344": "記憶體", "3008": "光電", "2409": "光電",
+            "2301": "光電", "2382": "AI", "2357": "AI",
+            "6269": "AI", "2308": "電動車", "1513": "電動車",
+            "2327": "電動車", "1319": "電動車", "1503": "電動車"
         }
         
-        # 移除 .TW 後綴
         code = ticker.split('.')[0]
-        
         if code in industry_mapping:
             return industry_mapping[code]
         
-        # 根據股票名稱關鍵詞判斷
+        # 3. 根據股票名稱或產業名稱關鍵詞判斷
+        name_to_check = f"{stock_name} {ticker}"
+        
         name_keywords = {
-            "半導體": ["半導體", "IC", "晶圓", "晶片", "矽"],
-            "記憶體": ["記憶體", "DRAM", "快閃"],
-            "AI": ["AI", "伺服器", "雲端"],
-            "光電": ["光", "面板", "顯示"],
-            "電動車": ["電動", "電池", "車用"],
-            "5G": ["5G", "通訊", "射頻"],
-            "綠能": ["太陽能", "風電", "儲能"],
-            "生技": ["生技", "製藥", "醫"]
+            "半導體": ["半導體", "IC", "晶圓", "晶片", "矽", "台積", "聯發"],
+            "記憶體": ["記憶體", "DRAM", "快閃", "旺宏", "華邦"],
+            "AI": ["AI", "伺服器", "雲端", "廣達", "技嘉", "微星", "緯創"],
+            "光電": ["光", "面板", "顯示", "友達", "群創", "大立光"],
+            "電動車": ["電動", "電池", "車用", "特斯拉", "充電", "鴻海"],
+            "5G": ["5G", "通訊", "射頻", "中華電", "遠傳", "台哥大"],
+            "綠能": ["太陽能", "風電", "儲能", "能源", "綠能", "氫"],
+            "生技": ["生技", "製藥", "醫", "疫苗", "新藥"]
         }
         
         for industry, keywords in name_keywords.items():
             for keyword in keywords:
-                if keyword in stock_name:
+                if keyword in name_to_check:
                     return industry
         
         return None

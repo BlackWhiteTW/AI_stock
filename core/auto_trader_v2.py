@@ -541,6 +541,111 @@ class AutoTraderV2:
         
         return f"v2.0 回測完成 (市場狀態: {self.market_regime})", df_logs
     
+    def execute_daily_trade(self, ticker, df):
+        """
+        🆕 v2.0 每日自動交易決策
+        
+        與 run_simulation 不同，這是針對「當下」的數據進行一次性決策。
+        用於每日自動化排程。
+        """
+        if df.empty:
+            return "⚠️ 無法取得數據", None
+            
+        current_price = df['Close'].iloc[-1]
+        
+        # 1. 更新市場狀態與持倉最高價
+        self._update_market_regime(df)
+        
+        portfolio_qty = self.account.portfolio.get(ticker, {}).get('qty', 0)
+        if portfolio_qty > 0:
+            if ticker not in self.position_peaks:
+                self.position_peaks[ticker] = current_price
+            else:
+                self.position_peaks[ticker] = max(self.position_peaks[ticker], current_price)
+        
+        # 2. 智能風控檢查 (停損停利)
+        if portfolio_qty > 0:
+            avg_cost = self.account.portfolio[ticker]['avg_price']
+            profit_loss_pct = (current_price - avg_cost) / avg_cost
+            
+            # 獲取動態閾值
+            params = self.advisor._get_params(ticker)
+            df_with_ind = self.advisor.calculate_technical_indicators(df.copy(), params)
+            
+            if 'ATR' in df_with_ind.columns:
+                current_atr = df_with_ind['ATR'].iloc[-1]
+                dynamic_stop_pct = -(self.risk_params['atr_stop_multiplier'] * current_atr / current_price)
+                dynamic_profit_pct = (self.risk_params['atr_profit_multiplier'] * current_atr / avg_cost)
+            else:
+                dynamic_stop_pct = -0.08
+                dynamic_profit_pct = 0.15
+                
+            # A. 停損
+            if profit_loss_pct <= dynamic_stop_pct:
+                success, msg = self.account.sell(ticker, current_price, portfolio_qty)
+                if success:
+                    del self.position_peaks[ticker]
+                    return f"🛑 動態停損賣出: {msg} (損益: {profit_loss_pct:.1%})", {"action": "賣出", "reason": "停損"}
+            
+            # B. 停利
+            if profit_loss_pct >= dynamic_profit_pct:
+                success, msg = self.account.sell(ticker, current_price, portfolio_qty)
+                if success:
+                    del self.position_peaks[ticker]
+                    return f"✅ 動態停利賣出: {msg} (損益: {profit_loss_pct:.1%})", {"action": "賣出", "reason": "停利"}
+            
+            # C. 移動停損
+            if profit_loss_pct > 0.05 and ticker in self.position_peaks:
+                peak_price = self.position_peaks[ticker]
+                drawdown = (current_price - peak_price) / peak_price
+                if drawdown <= -self.risk_params['trailing_stop_pct']:
+                    success, msg = self.account.sell(ticker, current_price, portfolio_qty)
+                    if success:
+                        del self.position_peaks[ticker]
+                        return f"📉 移動停損賣出: {msg} (高點回落 {abs(drawdown):.1%})", {"action": "賣出", "reason": "移動停損"}
+
+        # 3. 多信號融合決策 (買入/加碼/減倉)
+        signal_result = self._calculate_signal_score(ticker, df, current_price)
+        
+        cash = self.account.balance
+        total_assets = self.account.get_total_assets()
+        current_position_value = portfolio_qty * current_price
+        
+        # A. 買入/加碼邏輯
+        if signal_result['action'] == 'BUY':
+            target_position_size = self._calculate_dynamic_position_size(
+                signal_result['score'],
+                signal_result['confidence'],
+                current_position_value,
+                total_assets
+            )
+            
+            target_value = total_assets * target_position_size
+            needed_amount = target_value - current_position_value
+            
+            if needed_amount > 1000:
+                # 實戰中，我們一次買足目標倉位 (或考慮資金剩餘)
+                qty_to_buy = int(min(needed_amount, cash) // current_price)
+                if qty_to_buy > 0:
+                    success, msg = self.account.buy(ticker, current_price, qty_to_buy)
+                    if success:
+                        return f"📈 AI 買進成功: {msg} (評分:{signal_result['score']:.0f}, 信心:{signal_result['confidence']:.0%})", {"action": "買入", "score": signal_result['score']}
+            
+        # B. 賣出/減倉邏輯
+        elif signal_result['action'] == 'SELL' and portfolio_qty > 0:
+            # 強烈看空則全清，否則減半
+            sell_ratio = 1.0 if signal_result['score'] <= -60 else 0.5
+            qty_to_sell = int(portfolio_qty * sell_ratio)
+            
+            if qty_to_sell > 0:
+                success, msg = self.account.sell(ticker, current_price, qty_to_sell)
+                if success:
+                    if sell_ratio == 1.0 and ticker in self.position_peaks:
+                        del self.position_peaks[ticker]
+                    return f"📉 AI 減倉賣出: {msg} (評分:{signal_result['score']:.0f})", {"action": "賣出", "score": signal_result['score']}
+        
+        return f"😐 AI 建議觀望 (評分:{signal_result['score']:.0f})", {"action": "觀望", "score": signal_result['score']}
+
     def optimize_parameters(self, ticker, df, param_grid, lookback_days=90):
         """
         🆕 v2.0 參數自動優化系統

@@ -98,20 +98,25 @@ def run_morning_job(log_func=print):
     except Exception as e:
         log_func(f"❌ 開盤預測執行失敗: {e}")
 
-def run_daily_job(log_func=print, trader=None, advisor=None):
+def run_daily_job(log_func=print, trader=None, advisor=None, trader_version="v2"):
     """
     執行每日自動交易排程 (支援多核心平行運算)
     包含: 收盤驗證, 市場掃描, 自動交易
     :param log_func: 用於輸出日誌的函數，預設為 print
     :param trader: 外部傳入的 AutoTrader 下單機器人 (若無則自動建立)
     :param advisor: 外部傳入的 AIAdvisor 顧問 (若無則自動建立)
+    :param trader_version: 預設使用的機器人版本 ("v1" 或 "v2")
     """
-    log_func(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 🌙 [Afternoon Job] 啟動每日自動交易排程...")
+    log_func(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 🌙 [Afternoon Job] 啟動每日自動交易排程 (使用 {trader_version})...")
     
     # 初始化
     if trader is None:
-        log_func("正在初始化 虛擬帳戶...")
-        trader = AutoTrader(account_file='data/ai_account.json')
+        log_func(f"正在初始化 {trader_version} 虛擬帳戶...")
+        if trader_version == "v2":
+            from core.auto_trader_v2 import AutoTraderV2
+            trader = AutoTraderV2(account_file='data/ai_account_v2.json')
+        else:
+            trader = AutoTrader(account_file='data/ai_account.json')
         
     if advisor is None:
         log_func("正在初始化 AI 模型...")

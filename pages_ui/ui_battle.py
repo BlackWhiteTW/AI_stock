@@ -6,16 +6,26 @@ import concurrent.futures
 from utils import get_stock_data
 from jobs.ai_tasks import process_stock_scan, process_trade_decision
 
-def render_tab_battle(trader_bot, symbol, hist_data, df_stocks, ai_advisor):
+def render_tab_battle(trader_bot_v1, trader_bot_v2, symbol, hist_data, df_stocks, ai_advisor):
     st.header("⚔️ AI 自動交易對戰系統")
     st.markdown("""
     這裡可以啟用一個 **全自動交易機器人**，它擁有獨立的資金與帳戶。
     它會利用 AI 投顧的分析結果，在歷史數據中進行模擬交易 (Backtesting)，
     並實際扣除 **手續費 (0.1425%)** 與 **證交稅 (0.3%)**，看看它能否戰勝大盤！
     """)
+
+    # --- 機器人版本選擇 ---
+    trader_version = st.radio("🤖 選擇機器人版本", ["v1.0 (技術分析)", "v2.0 (AI 融合 + 動態倉位)"], horizontal=True)
     
+    if "v1.0" in trader_version:
+        trader_bot = trader_bot_v1
+        version_tag = "v1"
+    else:
+        trader_bot = trader_bot_v2
+        version_tag = "v2"
+
     # --- AI 資產儀表板 ---
-    st.subheader("🤖 AI 機器人資產儀表板")
+    st.subheader(f"🤖 AI 機器人 ({trader_version}) 資產儀表板")
     
     # 1. 計算 AI 持倉市值
     bot_prices = {}
@@ -131,7 +141,7 @@ def render_tab_battle(trader_bot, symbol, hist_data, df_stocks, ai_advisor):
                 def on_sim_progress(curr, total, date_str, assets):
                      p = curr / total if total > 0 else 0
                      sim_progress.progress(min(p, 1.0))
-                     sim_status.markdown(f"**回測穿越中...** 📅 `{date_str}` | 💰 資產淨值: `${assets:,.0f}`")
+                     sim_status.markdown(f"**回測穿越中 ({version_tag})...** 📅 `{date_str}` | 💰 資產淨值: `${assets:,.0f}`")
 
                 with st.spinner(f"AI 機器人正在穿越時空，對 {symbol} 進行交易 (從 {sim_days} 天前開始)..."):
                     msg, df_log = trader_bot.run_simulation(symbol, hist_data, progress_callback=on_sim_progress, lookback_days=sim_days)
@@ -139,13 +149,14 @@ def render_tab_battle(trader_bot, symbol, hist_data, df_stocks, ai_advisor):
                     sim_progress.empty()
                     sim_status.empty()
 
-                    st.session_state.bot_logs = df_log
+                    st.session_state[f'bot_logs_{version_tag}'] = df_log
                     st.success(f"回測完成！共交易 {len(df_log[df_log['Action']!=''])} 次")
                     
     with col_bot2:
         st.subheader("📈 績效表現")
-        if 'bot_logs' in st.session_state and not st.session_state.bot_logs.empty:
-            df_log = st.session_state.bot_logs
+        log_key = f'bot_logs_{version_tag}'
+        if log_key in st.session_state and not st.session_state[log_key].empty:
+            df_log = st.session_state[log_key]
             
             # 計算績效
             final_assets = df_log['Assets'].iloc[-1]
@@ -185,6 +196,41 @@ def render_tab_battle(trader_bot, symbol, hist_data, df_stocks, ai_advisor):
             # 顯示詳細交易紀錄
             with st.expander("查看 AI 詳細交易日誌"):
                 st.dataframe(df_log)
+
+    # --- 🆕 v2.0 專屬：參數優化中心 ---
+    if version_tag == "v2":
+        st.divider()
+        st.subheader("🎯 v2.0 智能參數優化中心")
+        st.markdown("利用「網格搜索」自動尋找最適合這檔股票的停損停利與信心門檻組合。")
+        
+        with st.expander("🛠️ 點擊展開優化設定", expanded=False):
+            opt_col1, opt_col2 = st.columns(2)
+            with opt_col1:
+                atr_stop = st.multiselect("停損倍數 (ATR)", [1.5, 2.0, 2.5, 3.0], default=[2.0, 2.5])
+                atr_profit = st.multiselect("停利倍數 (ATR)", [3.0, 4.0, 5.0, 6.0], default=[4.0, 5.0])
+            with opt_col2:
+                conf_thresh = st.multiselect("最低信心門檻", [0.5, 0.6, 0.7], default=[0.6])
+                opt_days = st.slider("優化回測天數", 60, 180, 90)
+            
+            if st.button("🚀 開始參數優化 (Grid Search)"):
+                param_grid = {
+                    'atr_stop_multiplier': atr_stop,
+                    'atr_profit_multiplier': atr_profit,
+                    'confidence_threshold': conf_thresh
+                }
+                
+                with st.spinner("正在計算所有參數組合的績效..."):
+                    opt_results = trader_bot.optimize_parameters(symbol, hist_data, param_grid, lookback_days=opt_days)
+                    
+                    st.success(f"優化完成！最佳評分: {opt_results['best_score']:.3f}")
+                    st.json(opt_results['best_params'])
+                    
+                    # 顯示前 5 名結果
+                    df_opt = pd.DataFrame(opt_results['all_results'])
+                    st.markdown("**前 5 名最優參數組合：**")
+                    st.dataframe(df_opt.head(5))
+                    
+                    st.info("💡 系統已自動套用最佳參數。現在您可以重新執行「自動交易回測」來查看完整曲線。")
 
     # --- 新增區塊：AI 待購清單 (AI Shopping List) ---
     st.divider()

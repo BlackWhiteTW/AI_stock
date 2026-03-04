@@ -18,27 +18,21 @@ from services.quota_manager import QuotaManager
 
 class SearchEngine:
     def __init__(self, api_key=None, cache_dir="data/news_cache"):
-        self.api_key = api_key or os.getenv("SERPAPI_KEY")
+        self.api_key = api_key or os.getenv("SERPAPI_KEY") or os.getenv("SERP_API_KEY")
         self.base_url = "https://serpapi.com/search"
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.cache_ttl_days = 7
-        self.quota_manager = QuotaManager() # 🆕 額度管理
+        self.quota_manager = QuotaManager() 
 
     def get_latest_news(self, query, num_results=5):
-        # ... (前段邏輯不變)
-        if cache_path.exists():
-            # (快取檢查邏輯)
-            pass
-        
-        # 如果需要連網
-        self.quota_manager.log_request() # 🆕 記錄請求
-        print(f"🌐 正在調用 SerpAPI... (剩餘次數預估: {self.quota_manager.get_status()['remaining']})")
         """
         獲取搜尋結果，優先使用 7 天內的本地快取
         """
-        # 1. 建立快取檔名 (簡單處理 query 成檔名)
-        cache_filename = f"serp_{hash(query)}.json"
+        # 1. 建立快取檔名 (使用簡單的雜湊處理 query)
+        import hashlib
+        query_hash = hashlib.md5(query.encode()).hexdigest()
+        cache_filename = f"serp_{query_hash}.json"
         cache_path = self.cache_dir / cache_filename
 
         # 2. 檢查是否有有效的快取
@@ -58,7 +52,10 @@ class SearchEngine:
         if not self.api_key:
             return "⚠️ SerpAPI Key 未設定，且無有效快取。"
 
-        print(f"🌐 正在調用 SerpAPI 獲取新資訊... (搜尋詞: {query})")
+        # 記錄請求額度
+        self.quota_manager.log_request()
+        print(f"🌐 正在調用 SerpAPI 獲取新資訊... (搜尋詞: {query}, 剩餘預估: {self.quota_manager.get_status()['remaining']})")
+        
         params = {
             "engine": "google_news",
             "q": query,
@@ -72,7 +69,7 @@ class SearchEngine:
             data = response.json()
             
             if "error" in data:
-                # 如果 API 報錯 (例如額度用盡)，嘗試回傳過期的快取作為備案
+                # 如果 API 報錯，嘗試回傳過期的快取作為備案
                 if cache_path.exists():
                     with open(cache_path, 'r', encoding='utf-8') as f:
                         old_data = json.load(f)
@@ -86,7 +83,13 @@ class SearchEngine:
             summaries = []
             for news in news_results[:num_results]:
                 title = news.get("title", "無標題")
-                source = news.get("source", {}).get("name", "未知來源") if isinstance(news.get("source"), dict) else str(news.get("source", "未知來源"))
+                source = "未知來源"
+                if "source" in news:
+                    if isinstance(news["source"], dict):
+                        source = news["source"].get("name", "未知來源")
+                    else:
+                        source = str(news["source"])
+                
                 date = news.get("date", "近期")
                 summaries.append(f"【{source}】{title} ({date})")
             

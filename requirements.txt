@@ -1,29 +1,29 @@
-# AI 與 LLM
+# AI and LLM
 google-generativeai
 python-dotenv
 
-# Web 框架
+# Web framework
 streamlit
 
-# 資料獲取
+# Data acquisition
 yfinance
 requests
 beautifulsoup4
 
-# 資料處理
+# Data processing
 pandas
 numpy
 
-# 視覺化
+# Visualization
 plotly
 
-# 機器學習
+# Machine learning
 torch
 scikit-learn
 
-# 資料解析
+# Data parsing
 lxml
 html5lib
 
-# 排程任務
+# Scheduled tasks
 schedule
