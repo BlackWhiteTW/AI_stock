@@ -2,13 +2,7 @@
 .env
 
 # 屏蔽資料內容 避免過多檔案
-data/financial_data/*
-data/indicator_cache/*.pkl
-data/news_cache/*.json
-data/saved_models/*
-data/stock_data/*.csv
-data/transaction_cache/*.json
-data/yahoo_tw_cache/*.json
+data/*
 
 # python 虛擬環境
 venv/*

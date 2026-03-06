@@ -56,6 +56,69 @@ class SpatioTemporalGNN(nn.Module):
         out = self.fc(final_h)
         return out.reshape(batch_size, num_nodes, -1)
 
+class HybridTransLSTM(nn.Module):
+    """
+    🚀 2026 旗艦終極版：Deep Transformer-LSTM 混合主模型
+    超深層架構：6-Layer Transformer + 3-Layer LSTM + 16-Head Attention
+    """
+    def __init__(self, input_dim, hidden_dim=256, num_layers=6, nhead=16, seq_len=20, output_dim=1):
+        super(HybridTransLSTM, self).__init__()
+        self.hidden_dim = hidden_dim
+        
+        # 1. 高維輸入映射與層歸一化
+        self.input_projection = nn.Linear(input_dim, hidden_dim)
+        self.norm1 = nn.LayerNorm(hidden_dim)
+        
+        # 2. 超深層 Transformer Encoder (市場全域邏輯)
+        # 這裡使用 16 個頭同時掃描不同技術特徵的關聯
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=hidden_dim, 
+            nhead=nhead, 
+            dim_feedforward=hidden_dim*4, # 擴大前饋神經網路
+            dropout=0.15,
+            batch_first=True,
+            activation='gelu' # 改用更平滑的 GELU
+        )
+        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+        
+        # 3. 多層深層 LSTM (短期價格動能)
+        self.lstm = nn.LSTM(
+            hidden_dim, 
+            hidden_dim, 
+            num_layers=3, # 增加至 3 層
+            batch_first=True, 
+            dropout=0.2
+        )
+        
+        # 4. 交叉注意力融合 (Cross-Attention Fusion)
+        self.fusion_att = nn.MultiheadAttention(embed_dim=hidden_dim, num_heads=8, batch_first=True)
+        
+        # 5. 重型輸出 MLP
+        self.fc = nn.Sequential(
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.GELU(),
+            nn.Dropout(0.3),
+            nn.Linear(hidden_dim, hidden_dim // 2),
+            nn.GELU(),
+            nn.Linear(hidden_dim // 2, output_dim)
+        )
+
+    def forward(self, x):
+        # x: [batch, seq_len, input_dim]
+        x_proj = self.norm1(self.input_projection(x))
+        
+        # 提取全域特徵
+        trans_out = self.transformer(x_proj) 
+        
+        # 提取短期動能
+        lstm_out, _ = self.lstm(x_proj)
+        
+        # 利用交叉注意力融合兩種特徵
+        # 讓 LSTM 的結果去 query Transformer 的全域資訊
+        fused_feat, _ = self.fusion_att(lstm_out[:, -1:, :], trans_out, trans_out)
+        
+        return self.fc(fused_feat.squeeze(1))
+
 class LSTMModel(nn.Module):
     """
     優化版殘差注意力 LSTM (Residual Attention LSTM)

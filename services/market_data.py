@@ -105,6 +105,53 @@ class MarketDataManager:
             
         return df
 
+    def consolidate_to_parquet(self, output_path='data/market_snapshot.parquet'):
+        """
+        🚀 高性能優化：將所有分散的 CSV 整合為單一 Parquet 檔案
+        這能極大提升 GNN 與全市場掃描的 I/O 速度
+        """
+        import glob
+        import pyarrow as pa
+        import pyarrow.parquet as pq
+        
+        all_files = glob.glob(os.path.join(self.data_dir, "*.csv"))
+        if not all_files:
+            return None
+            
+        print(f"📦 正在整合 {len(all_files)} 個數據源至 Parquet 快照...")
+        
+        all_df = []
+        for f in all_files:
+            try:
+                ticker = os.path.basename(f).replace(".csv", "")
+                df = pd.read_csv(f)
+                df['Ticker'] = ticker
+                # 確保 Date 是 datetime 格式
+                df['Date'] = pd.to_datetime(df['Date'])
+                all_df.append(df)
+            except:
+                continue
+                
+        if not all_df:
+            return None
+            
+        # 合併大表
+        full_df = pd.concat(all_df, ignore_index=True)
+        
+        # 存儲為 Parquet (使用 Snappy 壓縮)
+        full_df.to_parquet(output_path, engine='pyarrow', compression='snappy', index=False)
+        print(f"✅ 市場快照已儲存: {output_path} ({os.path.getsize(output_path)/1024/1024:.2f} MB)")
+        return output_path
+
+    def load_market_snapshot(self, snapshot_path='data/market_snapshot.parquet'):
+        """讀取整合後的市場快照"""
+        if os.path.exists(snapshot_path):
+            try:
+                return pd.read_parquet(snapshot_path, engine='pyarrow')
+            except Exception as e:
+                print(f"讀取 Parquet 失敗: {e}")
+        return None
+
     def get_data_range(self, ticker, days=None):
         """
         取得特定範圍的數據
