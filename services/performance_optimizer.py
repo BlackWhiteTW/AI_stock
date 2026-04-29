@@ -62,112 +62,33 @@ class BatchDataLoader:
 
 
 class TechnicalIndicatorCache:
-    """技術指標快取系統 - 避免重複計算"""
+    """⚡ 優化版技術指標快取系統 - 對接統一快取管理器"""
     
-    def __init__(self, cache_dir='data/indicator_cache', ttl_hours=24):
-        """
-        初始化指標快取
-        :param cache_dir: 快取目錄
-        :param ttl_hours: 快取有效期(小時)
-        """
-        self.cache_dir = cache_dir
-        self.ttl_hours = ttl_hours
-        os.makedirs(cache_dir, exist_ok=True)
+    def __init__(self, ttl_hours=24):
+        from .cache_manager import get_cache_manager
+        self.cache_manager = get_cache_manager()
+        self.ttl = ttl_hours * 3600
         
-    def _get_cache_key(self, ticker, params):
-        """
-        生成快取鍵
-        - 有 ticker: {ticker}_{hash}.pkl  (股票專用快取)
-        - 無 ticker: generic_{hash}.pkl  (通用快取，用於回測等)
-        """
+    def _get_identifier(self, ticker, params, data_hash):
+        """生成唯一識別符，包含參數與數據指紋"""
         param_str = str(sorted(params.items()))
-        param_hash = hashlib.md5(param_str.encode()).hexdigest()
-        
-        if ticker and ticker != 'unknown':
-            # 🎯 股票專用快取
-            key = f"{ticker}_{param_hash}"
-        else:
-            # 🔧 通用快取 (用於回測、策略優化等)
-            key = f"generic_{param_hash}"
-        
-        return key
-    
-    def _get_cache_path(self, cache_key):
-        """獲取快取文件路徑"""
-        return os.path.join(self.cache_dir, f"{cache_key}.pkl")
+        combined_hash = hashlib.md5(f"{param_str}_{data_hash}".encode()).hexdigest()
+        return f"{ticker}_{combined_hash}"
     
     def get(self, ticker, params, data_hash):
-        """
-        獲取快取的指標數據
-        :param ticker: 股票代碼
-        :param params: 計算參數
-        :param data_hash: 數據哈希(用於檢測數據變化)
-        :return: DataFrame or None
-        """
-        cache_key = self._get_cache_key(ticker, params)
-        cache_path = self._get_cache_path(cache_key)
-        
-        if not os.path.exists(cache_path):
-            return None
-        
-        try:
-            # 檢查快取時效
-            mtime = os.path.getmtime(cache_path)
-            age_hours = (time.time() - mtime) / 3600
-            
-            if age_hours > self.ttl_hours:
-                os.remove(cache_path)
-                return None
-            
-            # 讀取快取
-            with open(cache_path, 'rb') as f:
-                cache_data = pickle.load(f)
-            
-            # 驗證數據哈希
-            if cache_data.get('data_hash') != data_hash:
-                return None
-            
-            return cache_data.get('df')
-            
-        except Exception as e:
-            return None
+        """獲取快取的指標數據"""
+        identifier = self._get_identifier(ticker, params, data_hash)
+        return self.cache_manager.get("technical_indicators", identifier)
     
     def set(self, ticker, params, df, data_hash):
-        """
-        保存指標數據到快取
-        :param ticker: 股票代碼
-        :param params: 計算參數
-        :param df: 包含指標的 DataFrame
-        :param data_hash: 數據哈希
-        """
-        cache_key = self._get_cache_key(ticker, params)
-        cache_path = self._get_cache_path(cache_key)
-        
-        try:
-            cache_data = {
-                'df': df,
-                'data_hash': data_hash,
-                'timestamp': time.time()
-            }
-            
-            with open(cache_path, 'wb') as f:
-                pickle.dump(cache_data, f)
-                
-        except Exception as e:
-            pass  # 快取失敗不影響主流程
+        """保存指標數據到快取"""
+        identifier = self._get_identifier(ticker, params, data_hash)
+        # 利用 CacheManager 的自動判定，DataFrame 會存為 Parquet
+        self.cache_manager.set("technical_indicators", identifier, df, ttl=self.ttl)
     
     def clear_expired(self):
-        """清理過期快取"""
-        try:
-            now = time.time()
-            for filename in os.listdir(self.cache_dir):
-                filepath = os.path.join(self.cache_dir, filename)
-                if os.path.isfile(filepath):
-                    age_hours = (now - os.path.getmtime(filepath)) / 3600
-                    if age_hours > self.ttl_hours:
-                        os.remove(filepath)
-        except Exception as e:
-            pass
+        """清理過期快取 (調用統一清理)"""
+        self.cache_manager.cleanup_expired()
 
 
 class ParallelStockScanner:
@@ -261,6 +182,36 @@ class ParallelStockScanner:
                 if progress_callback:
                     progress_callback(completed, total, ticker, result)
         
+        return results
+
+    def scan_stocks_parallel(self, stock_data_list: List[Tuple[str, pd.DataFrame]], 
+                            include_news=True, use_cache=True):
+        """
+        並行分析股票數據 (為 MarketScannerHelper 提供)
+        :param stock_data_list: [(ticker, df), ...] 元組列表
+        :param include_news: 是否包含新聞
+        :param use_cache: 是否使用快取 (此處主要依賴 Advisor 內部的快取)
+        :return: Dict[str, Dict] {ticker: analysis_result}
+        """
+        results = {}
+        
+        def analyze_single(item):
+            ticker, df = item
+            try:
+                # 委託給 AIAdvisor 進行分析
+                analysis = self.ai_advisor.analyze_stock(ticker, df, include_news=include_news)
+                return ticker, analysis
+            except Exception as e:
+                print(f"並行分析 {ticker} 失敗: {e}")
+                return ticker, None
+
+        with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+            futures = [executor.submit(analyze_single, item) for item in stock_data_list]
+            for future in as_completed(futures):
+                ticker, analysis = future.result()
+                if analysis:
+                    results[ticker] = analysis
+                    
         return results
 
 

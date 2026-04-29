@@ -69,14 +69,20 @@ class FastPredictionEngine:
             
             if not before_today.empty:
                 base_price = float(before_today['Close'].iloc[-1])
+                open_price = float(before_today['Open'].iloc[-1])
+                last_date = before_today.index[-1].strftime("%Y-%m-%d")
             else:
                 base_price = float(hist_data['Close'].iloc[-1])
+                open_price = float(hist_data['Open'].iloc[-1])
+                last_date = hist_data.index[-1].strftime("%Y-%m-%d")
             
             expected_change = ((pred_price - base_price) / base_price) * 100
             
             result = {
                 "ticker": ticker,
+                "data_last_date": last_date,
                 "base_price": base_price,
+                "open_price": open_price,
                 "predicted_price": float(pred_price),
                 "expected_change_pct": round(expected_change, 2)
             }
@@ -214,14 +220,20 @@ def _predict_worker(ticker, ai_service_class=None):
         
         if not before_today.empty:
             base_price = float(before_today['Close'].iloc[-1])
+            open_price = float(before_today['Open'].iloc[-1])
+            last_date = before_today.index[-1].strftime("%Y-%m-%d")
         else:
             base_price = float(hist_data['Close'].iloc[-1])
+            open_price = float(hist_data['Open'].iloc[-1])
+            last_date = hist_data.index[-1].strftime("%Y-%m-%d")
         
         expected_change = ((pred_price - base_price) / base_price) * 100
         
         return {
             "ticker": ticker,
+            "data_last_date": last_date,
             "base_price": base_price,
+            "open_price": open_price,
             "predicted_price": float(pred_price),
             "expected_change_pct": round(expected_change, 2)
         }

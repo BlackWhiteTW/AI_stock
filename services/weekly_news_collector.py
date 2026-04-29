@@ -131,7 +131,15 @@ class WeeklyNewsCollector:
         news_items = week_data.get("news_items", [])
         existing_hashes = {item.get("content_hash") for item in news_items}
 
+        # ⚡ 快速失敗機制：連續失敗超過 3 次就跳過整個收集
+        consecutive_failures = 0
+        max_consecutive_failures = 3
+
         for category, keywords in self.search_categories.items():
+            if consecutive_failures >= max_consecutive_failures:
+                print(f"\n⏭️ 連續失敗 {max_consecutive_failures} 次，跳過剩餘類別")
+                break
+
             print(f"\n🔍 搜尋類別: {category}")
 
             for keyword in keywords[:2]:  # 每個類別取前2個關鍵詞
@@ -141,8 +149,15 @@ class WeeklyNewsCollector:
                         query=f"{keyword} 台灣", num_results=5
                     )
 
-                    if not news_content or "❌" in news_content or "⚠️" in news_content:
+                    if not news_content:
+                        consecutive_failures += 1
+                        print(
+                            f"  ⏭️ {keyword}: API 無回應，跳過 (失敗次數: {consecutive_failures})"
+                        )
                         continue
+
+                    # 重置失敗計數器（成功獲取數據）
+                    consecutive_failures = 0
 
                     # 分析新聞情緒
                     sentiment_score = self.news_analyzer.analyze_text_sentiment(
@@ -174,7 +189,13 @@ class WeeklyNewsCollector:
                     print(f"  ✅ {keyword}: 情緒分數 {sentiment_score:.2f}")
 
                 except Exception as e:
-                    print(f"  ⚠️ {keyword} 搜尋失敗: {e}")
+                    consecutive_failures += 1
+                    print(
+                        f"  ⚠️ {keyword} 搜尋失敗: {str(e)[:50]} (失敗次數: {consecutive_failures})"
+                    )
+                    if consecutive_failures >= max_consecutive_failures:
+                        print(f"  🛑 達到最大失敗次數，停止收集")
+                        break
 
         # 更新周數據
         week_data["news_items"] = news_items
@@ -222,16 +243,22 @@ class WeeklyNewsCollector:
         all_news = []
         sentiment_scores = []
 
+        # ⚡ 添加超時保護
         for query in queries:
             try:
                 news_content = self.search_engine.get_latest_news(query, num_results=3)
 
-                if news_content and "❌" not in news_content:
-                    sentiment_score = self.news_analyzer.analyze_text(news_content)
+                if news_content:  # None 或空字串都會被跳過
+                    sentiment_score = self.news_analyzer.analyze_text_sentiment(
+                        news_content
+                    )
                     all_news.append(news_content)
                     sentiment_scores.append(sentiment_score)
+                else:
+                    print(f"  ⏭️ {query}: 無數據，跳過")
             except Exception as e:
-                print(f"⚠️ {query} 搜尋失敗: {e}")
+                print(f"⚠️ {query} 搜尋失敗: {str(e)[:50]}")
+                continue  # 繼續下一個查詢，不中斷
 
         avg_sentiment = (
             sum(sentiment_scores) / len(sentiment_scores) if sentiment_scores else 0.0

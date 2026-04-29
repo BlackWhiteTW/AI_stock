@@ -136,109 +136,40 @@ class NewsAnalyzer:
         os.makedirs(self.cache_dir, exist_ok=True)
         self.cache_duration = 1800  # 30分鐘快取
 
-        # 🆕 產業關鍵詞映射（用於查詢國際產業新聞）
+        # 🚀 效能優化：減少關鍵詞數量，每個類別只留最重要的 2-3 個，加速搜尋
         self.industry_keywords = {
             "半導體": {
-                "zh": ["半導體", "晶圓", "晶片", "IC設計", "封測"],
-                "en": [
-                    "semiconductor",
-                    "chip shortage",
-                    "GPU demand",
-                    "AI chip",
-                    "memory shortage",
-                    "TSMC",
-                    "wafer",
-                    "foundry",
-                    "ASML",
-                    "HBM memory",
-                    "DDR5",
-                    "chiplet",
-                    "3nm process",
-                ],
+                "zh": ["半導體", "晶圓", "台積電"],
+                "en": ["semiconductor market", "TSMC news", "chip industry"]
             },
             "記憶體": {
-                "zh": ["記憶體", "DRAM", "NAND Flash", "儲存"],
-                "en": [
-                    "memory shortage",
-                    "DRAM price",
-                    "NAND flash",
-                    "HBM",
-                    "memory demand",
-                    "storage",
-                    "SK Hynix",
-                    "Micron",
-                ],
+                "zh": ["記憶體", "DRAM", "NAND"],
+                "en": ["memory market", "DRAM prices", "Micron news"]
             },
             "AI": {
-                "zh": ["人工智慧", "AI晶片", "機器學習", "深度學習"],
-                "en": [
-                    "AI chip demand",
-                    "GPU shortage",
-                    "NVIDIA",
-                    "AI server",
-                    "ChatGPT",
-                    "generative AI",
-                    "AI accelerator",
-                    "inference chip",
-                ],
+                "zh": ["人工智慧", "AI 伺服器", "NVIDIA"],
+                "en": ["AI server market", "NVIDIA news", "AI chip demand"]
             },
             "光電": {
-                "zh": ["光學", "鏡頭", "面板", "顯示器"],
-                "en": [
-                    "optical lens",
-                    "camera module",
-                    "display panel",
-                    "OLED",
-                    "mini LED",
-                    "micro LED",
-                    "LCD",
-                ],
+                "zh": ["面板", "光學鏡頭"],
+                "en": ["display panel market", "optical lens news"]
             },
             "電動車": {
-                "zh": ["電動車", "電池", "充電樁", "車用晶片"],
-                "en": [
-                    "EV battery",
-                    "electric vehicle",
-                    "Tesla",
-                    "BYD",
-                    "automotive chip",
-                    "battery shortage",
-                    "charging station",
-                ],
+                "zh": ["電動車", "電池", "特斯拉"],
+                "en": ["EV market", "Tesla news", "battery technology"]
             },
             "5G": {
-                "zh": ["5G", "通訊", "基地台", "射頻"],
-                "en": [
-                    "5G deployment",
-                    "telecom equipment",
-                    "RF chip",
-                    "base station",
-                    "Qualcomm",
-                    "MediaTek",
-                ],
+                "zh": ["5G", "通訊設備"],
+                "en": ["5G infrastructure", "telecom market"]
             },
             "綠能": {
-                "zh": ["太陽能", "風電", "儲能", "電池"],
-                "en": [
-                    "solar energy",
-                    "wind power",
-                    "energy storage",
-                    "renewable energy",
-                    "green energy",
-                    "battery",
-                ],
+                "zh": ["綠能", "儲能", "太陽能"],
+                "en": ["renewable energy", "energy storage news"]
             },
             "生技": {
-                "zh": ["生技", "製藥", "疫苗", "醫療器材"],
-                "en": [
-                    "biotech",
-                    "pharmaceutical",
-                    "vaccine",
-                    "medical device",
-                    "FDA approval",
-                    "clinical trial",
-                ],
-            },
+                "zh": ["生技", "新藥"],
+                "en": ["biotech news", "pharmaceutical market"]
+            }
         }
 
     def get_sentiment_emoji(self, score):
@@ -863,16 +794,7 @@ class NewsAnalyzer:
         return None
 
     def get_industry_news(self, industry, language="en", max_results=10):
-        """查詢產業國際新聞（使用 Google News RSS）
-
-        Args:
-            industry: 產業名稱（如："半導體"、"AI"）
-            language: 語言（"zh" 中文, "en" 英文）
-            max_results: 最多返回幾則新聞
-
-        Returns:
-            新聞列表
-        """
+        """查詢產業國際新聞（使用 Google News RSS）"""
         if industry not in self.industry_keywords:
             return []
 
@@ -886,6 +808,7 @@ class NewsAnalyzer:
         if not keywords:
             return []
 
+        print(f"📡 正在獲取 {industry} ({language}) 產業新聞...")
         news_list = []
 
         # 使用前3個關鍵詞查詢（避免過多請求）
@@ -903,7 +826,8 @@ class NewsAnalyzer:
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
                 }
 
-                response = requests.get(url, headers=headers, timeout=10)
+                # 🚀 縮短超時時間至 5 秒
+                response = requests.get(url, headers=headers, timeout=5)
 
                 if response.status_code == 200:
                     soup = BeautifulSoup(response.content, "xml")

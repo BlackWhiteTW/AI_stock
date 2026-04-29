@@ -40,13 +40,14 @@ class AIAdvisor:
         """取得回測驗證數據 (委派給 AIService)"""
         return self.service.get_backtest_data(ticker, df, days)
 
-    def run_morning_predictions(self):
-        """執行每日晨間預測 (委派給 AIService)"""
-        return self.service.run_morning_predictions()
+    def run_morning_predictions(self, force=False):
+        """執行每日預測任務 (封裝 AIService)"""
+        return self.service.run_morning_predictions(force=force)
 
-    def validate_afternoon_results(self):
+
+    def validate_afternoon_results(self, force=False):
         """執行每日收盤驗證 (委派給 AIService)"""
-        return self.service.validate_afternoon_results()
+        return self.service.validate_afternoon_results(force=force)
 
     def optimize_strategy_basic(self, ticker, df):
         """策略優化 (委派給 StockStrategy)"""

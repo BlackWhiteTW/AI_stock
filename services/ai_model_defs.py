@@ -64,6 +64,7 @@ class HybridTransLSTM(nn.Module):
     def __init__(self, input_dim, hidden_dim=256, num_layers=6, nhead=16, seq_len=20, output_dim=1):
         super(HybridTransLSTM, self).__init__()
         self.hidden_dim = hidden_dim
+        self.num_layers = num_layers
         
         # 1. 高維輸入映射與層歸一化
         self.input_projection = nn.Linear(input_dim, hidden_dim)

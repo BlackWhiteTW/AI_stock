@@ -4,16 +4,20 @@ from datetime import datetime
 from pages_ui.components.shared import header_with_icon, status_card
 from utils import get_stock_data
 
+
 def render_stock_model_training(ai_advisor):
     """個股模型訓練子模組"""
-    header_with_icon("個股深度學習模型訓練", "📈", "針對特定股票訓練專屬的 GRU/LSTM 模型")
-    
+    header_with_icon(
+        "個股深度學習模型訓練", "📈", "針對特定股票訓練專屬的 GRU/LSTM 模型"
+    )
+
     ticker_input = st.text_input("輸入股票代碼", placeholder="例如: 2330, 2454, 0050")
-    
+
     if ticker_input:
-        ticker = ticker_input.replace('.TW', '').replace('.TWO', '')
+        ticker = ticker_input.replace(".TW", "").replace(".TWO", "")
         if st.button("🧠 啟動單股訓練", type="primary"):
             _run_stock_training(ai_advisor, ticker)
+
 
 def _run_stock_training(ai_advisor, ticker):
     """執行單股訓練"""

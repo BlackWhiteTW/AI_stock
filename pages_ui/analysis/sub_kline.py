@@ -14,24 +14,37 @@ def render_kline_chart(symbol, hist_data, current_price):
 
     df = hist_data.copy()
     
-    # 基礎 MA 計算
+    # 基礎 MA 計算 (在過濾前計算，確保圖表開頭不會斷掉)
     df['MA20'] = df['Close'].rolling(window=20).mean()
     df['MA60'] = df['Close'].rolling(window=60).mean()
+    
+    # --- 根據選擇區間過濾顯示數據 ---
+    range_map = {
+        "近1週": 5,
+        "近1月": 20,
+        "近1季": 60,
+        "近半年": 120,
+        "近1年": 250,
+        "全部": len(df)
+    }
+    
+    display_days = range_map.get(selected_range, 60)
+    df_display = df.tail(display_days)
     
     # 建立 Figure
     fig = go.Figure()
 
     # 1. K線
     fig.add_trace(go.Candlestick(
-        x=df.index,
-        open=df['Open'], high=df['High'], low=df['Low'], close=df['Close'],
+        x=df_display.index,
+        open=df_display['Open'], high=df_display['High'], low=df_display['Low'], close=df_display['Close'],
         increasing_line_color='#ef5350', decreasing_line_color='#26a69a', 
         name="K線"
     ))
     
     # 2. 均線
-    fig.add_trace(go.Scatter(x=df.index, y=df['MA20'], line=dict(color='#ffa726', width=1.5), name="MA20"))
-    fig.add_trace(go.Scatter(x=df.index, y=df['MA60'], line=dict(color='#42a5f5', width=1.5), name="MA60"))
+    fig.add_trace(go.Scatter(x=df_display.index, y=df_display['MA20'], line=dict(color='#ffa726', width=1.5), name="MA20"))
+    fig.add_trace(go.Scatter(x=df_display.index, y=df_display['MA60'], line=dict(color='#42a5f5', width=1.5), name="MA60"))
     
     fig.update_layout(
         height=600,

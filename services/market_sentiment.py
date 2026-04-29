@@ -270,13 +270,19 @@ class MarketSentimentAnalyzer:
         if df is None or len(df) == 0 or len(df) < ma_long:
             return 'Unknown'
         
+        # 取得最後一天的數值 (確保是純量 Scalar)
         ma_s = df['Close'].rolling(ma_short).mean().iloc[-1]
         ma_l = df['Close'].rolling(ma_long).mean().iloc[-1]
         price = df['Close'].iloc[-1]
         
-        if price > ma_s > ma_l:
+        # 處理多重數值或 NaN 的情況
+        if pd.isna(ma_s) or pd.isna(ma_l) or pd.isna(price):
+            return 'Neutral'
+
+        # 將 Series 比較轉為純量比較
+        if float(price) > float(ma_s) > float(ma_l):
             return 'Uptrend'    # 上升趨勢
-        elif price < ma_s < ma_l:
+        elif float(price) < float(ma_s) < float(ma_l):
             return 'Downtrend'  # 下降趨勢
         else:
             return 'Sideways'   # 盤整

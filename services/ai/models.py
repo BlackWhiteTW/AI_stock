@@ -38,6 +38,7 @@ class HybridTransLSTM(nn.Module):
     def __init__(self, input_dim, hidden_dim=256, num_layers=6, nhead=16, seq_len=20, output_dim=1):
         super(HybridTransLSTM, self).__init__()
         self.hidden_dim = hidden_dim
+        self.num_layers = num_layers
         self.input_projection = nn.Linear(input_dim, hidden_dim)
         self.norm1 = nn.LayerNorm(hidden_dim)
         encoder_layer = nn.TransformerEncoderLayer(

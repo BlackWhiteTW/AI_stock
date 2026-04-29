@@ -15,7 +15,7 @@ import json
 import datetime
 import traceback
 from utils import get_stock_data
-from .ai_model_defs import LSTMModel
+from .ai_model_defs import LSTMModel, HybridTransLSTM
 from . import tech_analysis
 from .stock_strategy import StockStrategy
 from .market_sentiment import MarketSentimentAnalyzer
@@ -49,9 +49,15 @@ class AIService:
         self.loaded_models = {}  # LRU Cache
         self.MAX_CACHE_SIZE = 15
 
+        # 🚀 新增：硬體設備自動偵測
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print(f"📡 AI 服務啟動，運算設備: {self.device}")
+
+        print("📊 [1/4] 正在初始化市場情緒分析器...")
         self.sentiment_analyzer = MarketSentimentAnalyzer()
 
         # 🆕 v5.4 新增：周期性新聞收集器
+        print("📊 [2/4] 正在初始化新聞收集器...")
         if NEWS_COLLECTOR_AVAILABLE:
             try:
                 self.news_collector = WeeklyNewsCollector()
@@ -64,6 +70,7 @@ class AIService:
 
         self.lookback = 60
         self.model_dir = "data/saved_models"
+        self.records_dir = "data/training_records" 
         self.prediction_file = "data/daily_predictions.json"
         self.base_model_path = "data/saved_models/base_model.pth"
 
@@ -109,9 +116,36 @@ class AIService:
 
         if not os.path.exists(self.model_dir):
             os.makedirs(self.model_dir)
+        if not os.path.exists(self.records_dir):
+            os.makedirs(self.records_dir)
 
+        print("📊 [3/4] 正在初始化交易策略引擎...")
         self.strategy = StockStrategy()
+        
+        print("📊 [4/4] 正在掃描本地模型...")
         self._load_all_models()
+        print(f"✨ AI 服務初始化完成 (共載入 {len(self.models)} 檔模型資訊)")
+
+    def _save_training_record(self, ticker, loss, model_type="Individual"):
+        """💾 保存訓練記錄到 JSON，供 UI 歷史分頁讀取"""
+        try:
+            record = {
+                "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "ticker": ticker,
+                "loss": float(loss),
+                "model_type": model_type,
+                "version": self.MODEL_VERSION
+            }
+            # 檔案名包含時間戳與代碼
+            filename = f"{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}_{ticker.replace('.', '_')}.json"
+            file_path = os.path.join(self.records_dir, filename)
+            
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(record, f, ensure_ascii=False, indent=4)
+            return True
+        except Exception as e:
+            print(f"⚠️ 無法保存訓練記錄: {e}")
+            return False
 
     def _fetch_representative_stocks(self, count=200):
         """🌐 從網路與本地清單動態獲取各產業代表性標的 (目標 200 支)"""
@@ -217,9 +251,22 @@ class AIService:
             input_dim = checkpoint.get("input_dim", len(self.feature_columns))
             hidden_dim = checkpoint.get("hidden_dim", 256)
             num_layers = checkpoint.get("num_layers", 3)
+            model_type = checkpoint.get("model_type", "LSTMModel") # 預設為舊版 LSTM
 
-            model = LSTMModel(input_dim, hidden_dim, num_layers, output_dim=1)
+            # 🚀 根據類型實例化模型
+            if model_type == "HybridTransLSTM":
+                model = HybridTransLSTM(
+                    input_dim=input_dim, 
+                    hidden_dim=hidden_dim, 
+                    num_layers=num_layers,
+                    seq_len=self.lookback
+                )
+            else:
+                model = LSTMModel(input_dim, hidden_dim, num_layers, output_dim=1)
+                
             model.load_state_dict(checkpoint["model_state_dict"], strict=False)
+            model.to(self.device) # 🚀 確保移至正確設備
+            model.float()        # 🚀 確保權重為 Float32
             model.eval()
 
             if len(self.loaded_models) >= self.MAX_CACHE_SIZE:
@@ -244,23 +291,42 @@ class AIService:
                 df, ticker=ticker, include_financial=True
             )
 
-        # 處理缺失特徵
+        # 🚀 確保所有特徵欄位都存在，若缺失則補 0
         for col in self.feature_columns:
             if col not in df.columns:
-                df[col] = 0
+                df[col] = 0.0
 
-        data_clean = df[self.feature_columns].fillna(0).iloc[60:].copy()
+        # 處理 Infinity 異常值
+        data_clean = df[self.feature_columns].copy()
+        
+        # 1. 將無限大替換為 NaN，然後填充為 0
+        data_clean = data_clean.replace([np.inf, -np.inf], np.nan)
+        data_clean = data_clean.fillna(0)
+        
+        # 2. 截斷極端值 (例如大於 10 億或小於 -10 億的異常數據)
+        data_clean = data_clean.clip(lower=-1e9, upper=1e9)
+
+        # 執行切片
+        data_clean = data_clean.iloc[60:].copy()
         if data_clean.empty:
-            data_clean = df[self.feature_columns].fillna(0).copy()
+            # 如果切片後沒數據，至少回傳原始結構填充 0
+            data_clean = df[self.feature_columns].replace([np.inf, -np.inf], 0).fillna(0).copy()
 
         # 高波動股票對數處理
-        price_cv = data_clean["Close"].std() / data_clean["Close"].mean()
+        price_cv = data_clean["Close"].std() / (data_clean["Close"].mean() + 1e-8)
         if price_cv > 0.6:
             for feat in ["Close", "Open", "High", "Low"]:
-                data_clean[feat] = np.log1p(data_clean[feat])
+                # 確保 log1p 內的值為正數
+                data_clean[feat] = np.log1p(data_clean[feat].clip(lower=0))
 
         scaler = MinMaxScaler(feature_range=(-1, 1))
-        scaled_data = scaler.fit_transform(data_clean.values)
+        
+        # 再次檢查是否存在 NaN (雖然前面已填 0，但 log1p 可能產生新 NaN)
+        final_values = data_clean.values
+        if not np.isfinite(final_values).all():
+            final_values = np.nan_to_num(final_values, nan=0.0, posinf=0.0, neginf=0.0)
+            
+        scaled_data = scaler.fit_transform(final_values)
 
         X, y = [], []
         for i in range(len(scaled_data) - lookback - 1):
@@ -273,15 +339,15 @@ class AIService:
         self, ticker, df, progress_callback=None, use_transfer_learning=True
     ):
         """
-        🔥 專業級 LSTM 訓練引擎
-        包含 GPU 加速、SWA、方向性損失優化
+        🔥 專業級旗艦訓練引擎 (升級為 HybridTransLSTM)
+        包含 GPU 加速、SWA、重度方向性損失優化
         """
         if len(df) > 3000:
             df = df.iloc[-3000:].copy()
         if len(df) < 200:
             return "⚠️ 數據不足 (至少需 200 天)", 0
 
-        # 特徵工程與回測優化
+        # 特徵工程
         print(f"  📊 正在為 {ticker} 進行特徵工程...")
         df = tech_analysis.calculate_technical_indicators(
             df, ticker=ticker, include_financial=True
@@ -290,130 +356,112 @@ class AIService:
 
         X, y, scaler = self.prepare_lstm_data(df, self.lookback, ticker=ticker)
 
-        # 數據分割
+        # 數據分割 (使用 90/10 分割，保留更多訓練數據)
         X_train, X_val, y_train, y_val = train_test_split(
-            X, y, test_size=0.2, shuffle=False
+            X, y, test_size=0.1, shuffle=False
         )
+        
+        # 🚀 修正：在最上層就強轉為 Tensor，避免後續 batch 處理索引問題與效能損耗
+        X_train_t = torch.tensor(X_train, dtype=torch.float32).to(self.device)
+        y_train_t = torch.tensor(y_train, dtype=torch.float32).to(self.device)
+        X_val_t = torch.tensor(X_val, dtype=torch.float32).to(self.device)
+        y_val_t = torch.tensor(y_val, dtype=torch.float32).to(self.device)
 
-        # 硬體偵測與優化配置
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        batch_size = 128 if torch.cuda.is_available() else 32
-        num_workers = 2 if torch.cuda.is_available() else 0
-
-        train_loader = DataLoader(
-            TensorDataset(
-                torch.from_numpy(X_train).float(), torch.from_numpy(y_train).float()
-            ),
-            batch_size=batch_size,
-            shuffle=True,
-            num_workers=num_workers,
-            pin_memory=True,
-        )
-        val_loader = DataLoader(
-            TensorDataset(
-                torch.from_numpy(X_val).float(), torch.from_numpy(y_val).float()
-            ),
-            batch_size=batch_size * 2,
-            shuffle=False,
-        )
-
-        # 模型初始化
+        # 🚀 升級：使用 HybridTransLSTM 旗艦架構
         input_dim = X.shape[2]
-        hidden_dim = 256 if len(X) > 1000 else 128
-        num_layers = 3 if len(X) > 1000 else 2
-        model = LSTMModel(input_dim, hidden_dim, num_layers, 1).to(device)
+        hidden_dim = 256
+        model = HybridTransLSTM(
+            input_dim=input_dim, 
+            hidden_dim=hidden_dim, 
+            num_layers=3, 
+            seq_len=self.lookback
+        ).to(self.device)
+        model.float() # 🚀 強制確保權重為 Float32
 
-        # 🚀 遷移學習核心
+        # 🚀 遷移學習：100% 匹配架構後才能發揮威力
         if use_transfer_learning and os.path.exists(self.base_model_path):
             try:
-                base = torch.load(
-                    self.base_model_path, map_location=device, weights_only=False
-                )
-                if base["input_dim"] == input_dim:
+                base = torch.load(self.base_model_path, map_location=self.device, weights_only=False)
+                if base.get("model_type") == 'HybridTransLSTM' and base["input_dim"] == input_dim:
                     model.load_state_dict(base["model_state_dict"], strict=False)
-                    print(f"  ✓ 已從主模型繼承權重")
-            except:
-                pass
+                    model.float() # 加載後再次確保
+                    print(f"  ✓ 成功繼承旗艦級主模型權重")
+            except Exception as e:
+                print(f"  ⚠️ 權重繼承跳過: {e}")
 
-        # 損失函數與優化器 (Huber + Directional Penalty)
+        # 損失函數：Huber + 重度方向懲罰
         criterion_base = nn.HuberLoss(delta=1.0)
         optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=1e-4)
-        scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=20, T_mult=2)
-
-        # SWA 設置
-        swa_model = AveragedModel(model)
-        swa_scheduler = SWALR(optimizer, swa_lr=0.0001)
-        swa_start = 70
+        scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=15, T_mult=2)
 
         best_val_loss = float("inf")
         start_time = time.time()
-        epochs = 100
+        epochs = 80 # 個股訓練不需要太多輪，避免過擬合
 
-        print(f"  🚀 開始訓練 {ticker} (Device: {device})")
+        print(f"  🚀 開始訓練 {ticker} (架構: HybridTransLSTM)")
 
         for epoch in range(epochs):
             model.train()
+            # 隨機打亂 Batch
+            perm = torch.randperm(len(X_train_t))
             train_loss = 0
-            for batch_X, batch_y in train_loader:
-                batch_X, batch_y = batch_X.to(device), batch_y.to(device)
-
-                # 數據增強
-                noise = torch.randn_like(batch_X) * 0.0001
-                outputs = model(batch_X + noise)
-                targets = batch_y.unsqueeze(1)
-
-                # 基礎損失
-                loss_mse = criterion_base(outputs, targets)
-
-                # 🆕 方向性懲罰 (Directional Penalty)
-                # 若預測漲跌方向與實際相反，額外加重懲罰
-                last_closes = batch_X[:, -1, 0].unsqueeze(1)
-                pred_diff = outputs - last_closes
-                real_diff = targets - last_closes
-                direction_mismatch = (pred_diff * real_diff) < 0
-                directional_loss = (
-                    torch.mean(direction_mismatch.float() * (outputs - targets) ** 2)
-                    * 0.5
-                )
-
-                loss = loss_mse + directional_loss
+            
+            for i in range(0, len(X_train_t), 32):
+                idx = perm[i:i+32]
+                batch_X = X_train_t[idx]
+                batch_y = y_train_t[idx]
 
                 optimizer.zero_grad()
+
+                outputs = model(batch_X)
+                targets = batch_y.unsqueeze(1)
+
+                # 1. 基礎誤差
+                loss_mse = criterion_base(outputs, targets)
+
+                # 2. 🚀 強化方向性懲罰 (提高權重到 2.0)
+                # 💡 安全索引：確保在 3D 張量下才執行序列取值
+                if batch_X.dim() == 3 and batch_X.size(1) > 0:
+                    try:
+                        # 取得最後一天的收盤價作為基準
+                        last_closes = batch_X[:, -1, 0].unsqueeze(1)
+                        pred_diff = outputs - last_closes
+                        real_diff = targets - last_closes
+                        direction_mismatch = (pred_diff * real_diff) < 0
+                        directional_loss = torch.mean(direction_mismatch.float() * (outputs - targets) ** 2) * 2.0
+                    except Exception as e:
+                        # 發生索引錯誤時安全退回
+                        print(f"⚠️ 方向損失計算失敗: {e}")
+                        directional_loss = 0.0
+                else:
+                    directional_loss = 0.0
+
+                loss = loss_mse + directional_loss
                 loss.backward()
+                
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
                 optimizer.step()
                 train_loss += loss.item()
 
-            # 更新 SWA
-            if epoch >= swa_start:
-                swa_model.update_parameters(model)
-                swa_scheduler.step()
-            else:
-                scheduler.step()
+            scheduler.step()
 
-            # 驗證階段
+            # 驗證
             if epoch % 5 == 0:
                 model.eval()
                 val_loss = 0
                 with torch.no_grad():
-                    for bx, by in val_loader:
-                        bx, by = bx.to(device), by.to(device)
-                        out = model(bx)
-                        val_loss += criterion_base(out, by.unsqueeze(1)).item()
-                avg_val_loss = val_loss / len(val_loader)
-                if avg_val_loss < best_val_loss:
-                    best_val_loss = avg_val_loss
-                    self._save_model(ticker, model, scaler, avg_val_loss, input_dim)
+                    v_y = y_val_t.unsqueeze(1)
+                    out = model(X_val_t)
+                    val_loss = criterion_base(out, v_y).item()
+                
+                if val_loss < best_val_loss:
+                    best_val_loss = val_loss
+                    self._save_model(ticker, model, scaler, val_loss, input_dim)
+                    # 🚀 新增：保存訓練記錄
+                    self._save_training_record(ticker, val_loss, "Individual")
 
                 if progress_callback:
-                    progress_callback(
-                        epoch + 1, epochs, avg_val_loss, time.time() - start_time
-                    )
-
-        # 結束訓練並切換回 CPU
-        torch.optim.swa_utils.update_bn(train_loader, swa_model, device=device)
-        final_model = swa_model.module.to("cpu")
-        self.loaded_models[ticker] = {"model": final_model, "scaler": scaler}
+                    progress_callback(epoch + 1, epochs, val_loss, time.time() - start_time)
 
         return f"✅ {ticker} 訓練完成！Best Loss: {best_val_loss:.6f}", best_val_loss
 
@@ -438,9 +486,10 @@ class AIService:
         else:
             return "❌ 找不到市場快照 (parquet)，請先在數據整合功能中生成。"
 
-        # 2. 篩選代表性標的與樣本
+        # 2. 篩選代表性標的與樣本 (🚀 增強版增加標的數量)
         tickers = full_df['Ticker'].unique()
-        selected_tickers = np.random.choice(tickers, min(100, len(tickers)), replace=False)
+        sample_count = 200 if enhanced else 100
+        selected_tickers = np.random.choice(tickers, min(sample_count, len(tickers)), replace=False)
         
         all_X, all_y = [], []
         for i, ticker in enumerate(selected_tickers):
@@ -450,24 +499,61 @@ class AIService:
             # 計算必要指標
             df_ticker = tech_analysis.calculate_technical_indicators(df_ticker, ticker=ticker)
             X, y, _ = self.prepare_lstm_data(df_ticker, self.lookback, ticker=ticker)
-            if X is not None:
+            
+            if X is not None and len(X) > 0:
+                # 強制清洗：確保數據中沒有 NaN 或 Inf
+                X = np.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
+                y = np.nan_to_num(y, nan=0.0, posinf=0.0, neginf=0.0)
+                
                 # 抽樣以維持 VRAM 穩定性
                 indices = np.random.choice(len(X), min(200, len(X)), replace=False)
                 all_X.append(X[indices]); all_y.append(y[indices])
             
-            if progress_callback and i % 10 == 0:
-                progress_callback(i, len(selected_tickers), -1, 0, ticker=ticker)
+            if progress_callback:
+                progress_callback(i + 1, len(selected_tickers), -1, 0, ticker=ticker)
 
-        X_train = torch.from_numpy(np.vstack(all_X)).float().to(self.device)
-        y_train = torch.from_numpy(np.vstack(all_y)).float().to(self.device).unsqueeze(-1)
-        
-        # 3. 初始化旗艦級混合模型
-        model = HybridTransLSTM(
-            input_dim=len(self.feature_columns),
-            hidden_dim=128,
-            num_layers=3,
-            seq_len=self.lookback
-        ).to(self.device)
+        if not all_X:
+            return "❌ 無法生成足夠的訓練樣本，請檢查數據源。"
+
+        # 合併數據並進行最後一次全局安全檢查
+        try:
+            # 修正：使用 concatenate 確保樣本沿著第 0 維度串接，避免維度錯誤
+            X_combined = np.nan_to_num(np.concatenate(all_X, axis=0), nan=0.0).astype(np.float32)
+            y_combined = np.nan_to_num(np.concatenate(all_y, axis=0), nan=0.0).astype(np.float32)
+            
+            print(f"📊 訓練數據準備就緒: X={X_combined.shape}, y={y_combined.shape}, 正在遷移至 {self.device}...")
+            
+            # 使用 torch.tensor 並強制 contiguous
+            X_train = torch.tensor(X_combined, dtype=torch.float32).contiguous().to(self.device)
+            y_train = torch.tensor(y_combined, dtype=torch.float32).contiguous().to(self.device).unsqueeze(-1)
+            
+        except Exception as e:
+            print(f"⚠️ GPU 數據遷移失敗 ({e})，嘗試切換至 CPU 模式...")
+            self.device = torch.device("cpu")
+            X_train = torch.tensor(X_combined, dtype=torch.float32)
+            y_train = torch.tensor(y_combined, dtype=torch.float32).unsqueeze(-1)
+
+        # 3. 初始化旗艦級混合模型 (🚀 增強版增加 hidden_dim)
+        hidden_dim = 256 if enhanced else 128
+        try:
+            model = HybridTransLSTM(
+                input_dim=len(self.feature_columns),
+                hidden_dim=hidden_dim,
+                num_layers=3,
+                seq_len=self.lookback
+            ).to(self.device)
+        except RuntimeError as e:
+            if "CUDA" in str(e):
+                print(f"❌ 模型載入 GPU 失敗，強退至 CPU: {e}")
+                self.device = torch.device("cpu")
+                model = HybridTransLSTM(
+                    input_dim=len(self.feature_columns),
+                    hidden_dim=128,
+                    num_layers=3,
+                    seq_len=self.lookback
+                ).to(self.device)
+            else:
+                raise e
         
         optimizer = torch.optim.AdamW(model.parameters(), lr=0.0005, weight_decay=1e-4)
         criterion = nn.HuberLoss()
@@ -476,30 +562,69 @@ class AIService:
         epochs = 100 if enhanced else 50
         batch_size = 256
         
-        for epoch in range(epochs):
-            model.train()
-            perm = torch.randperm(len(X_train))
-            epoch_loss = 0
-            for k in range(0, len(X_train), batch_size):
-                idx = perm[k:k+batch_size]
-                bx, by = X_train[idx], y_train[idx]
-                optimizer.zero_grad()
-                loss = criterion(model(bx), by)
-                loss.backward()
-                optimizer.step()
-                epoch_loss += loss.item()
-            
-            avg_loss = epoch_loss / (len(X_train) / batch_size)
-            if progress_callback: progress_callback(epoch + 1, epochs, avg_loss, 0)
+        print(f"🏃 開始執行主模型訓練 (Device: {self.device})...")
+        
+        try:
+            for epoch in range(epochs):
+                model.train()
+                perm = torch.randperm(len(X_train))
+                epoch_loss = 0
+                for k in range(0, len(X_train), batch_size):
+                    idx = perm[k:k+batch_size]
+                    bx, by = X_train[idx], y_train[idx]
+                    
+                    # 🚀 數值穩定性：再次確保輸入不包含極端值
+                    bx = torch.clamp(bx, -1e6, 1e6)
+                    
+                    optimizer.zero_grad()
+                    outputs = model(bx)
+                    loss = criterion(outputs, by)
+                    
+                    if torch.isnan(loss):
+                        print(f"⚠️ 偵測到 NaN Loss，跳過此 Batch")
+                        continue
+                        
+                    loss.backward()
+                    
+                    # 🚀 關鍵補強：梯度截斷，防止 Transformer 爆炸
+                    torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                    
+                    optimizer.step()
+                    epoch_loss += loss.item()
+                
+                avg_loss = epoch_loss / (len(X_train) / batch_size)
+                if progress_callback: progress_callback(epoch + 1, epochs, avg_loss, 0)
+                
+                if (epoch + 1) % 10 == 0:
+                    print(f"  Epoch [{epoch+1}/{epochs}] Loss: {avg_loss:.6f}")
+
+        except RuntimeError as e:
+            if "CUDA" in str(e) or "device-side assert" in str(e):
+                print(f"🚨 訓練中途發生 CUDA 崩潰: {e}")
+                print("🔄 正在強制降級至 CPU 並嘗試修復...")
+                # 降級邏輯
+                self.device = torch.device("cpu")
+                model = model.to("cpu")
+                X_train = X_train.to("cpu")
+                y_train = y_train.to("cpu")
+                # 遞迴呼叫自己（但現在 device 已經是 cpu，會安全跑完）
+                return self.train_base_model(stock_list, progress_callback, enhanced)
+            else:
+                raise e
                 
         # 5. 保存旗艦級模型
         torch.save({
             'model_state_dict': model.state_dict(),
             'feature_columns': self.feature_columns,
             'input_dim': len(self.feature_columns),
+            'hidden_dim': getattr(model, 'hidden_dim', 256),
+            'num_layers': getattr(model, 'num_layers', 3),
             'model_type': 'HybridTransLSTM',
             'version': '2026.旗艦版'
         }, self.base_model_path)
+        
+        # 🚀 新增：保存主模型訓練記錄
+        self._save_training_record("BASE_MODEL", avg_loss, "Flagship_Base")
         
         return f"✅ 旗艦級主模型訓練成功！(Loss: {avg_loss:.6f})"
 
@@ -522,7 +647,7 @@ class AIService:
 
             # 正規化
             data_scaled = scaler.transform(data)
-            X = torch.from_numpy(np.array([data_scaled])).float()
+            X = torch.from_numpy(np.array([data_scaled])).float().to(self.device)
 
             model.eval()
             with torch.no_grad():
@@ -577,6 +702,10 @@ class AIService:
             df["MFI"] = self.sentiment_analyzer.calculate_money_flow_index(df)
             df["ADX"] = self.sentiment_analyzer.calculate_adx(df)
             df["Price_Position"] = self.sentiment_analyzer.get_price_position(df)
+            
+            # 🆕 新增：成交量異常檢測 (轉換為 0/1 的 float)
+            df["Volume_Anomaly"] = self.sentiment_analyzer.detect_volume_anomaly(df).astype(float)
+            
             sent = self.sentiment_analyzer.get_market_sentiment()
             df["Market_Sentiment_Score"] = sent["score"]
         except:
@@ -671,80 +800,192 @@ class AIService:
         except:
             return price
 
-    def run_morning_predictions(self):
-        """開盤前批量預測紀錄"""
+    def run_morning_predictions(self, force=False):
+        """開盤前批量預測紀錄與新聞收集 (增量存檔版)"""
+        now = datetime.datetime.now()
+        today_str = now.strftime("%Y-%m-%d")
+        
+        # 🆕 週末檢查：避免參數失準
+        if not force and now.weekday() >= 5: # 5: Saturday, 6: Sunday
+            print(f"📅 [Morning Job] 今日為週末 ({now.strftime('%A')})，跳過自動預測任務以維持參數精準度。")
+            return 0
+
+        # 🆕 v5.4: 在開盤前自動執行每日新聞收集
+        if self.news_collector:
+            try:
+                print("📰 [Morning Job] 正在執行每日新聞收集...")
+                self.news_collector.collect_daily_news()
+            except Exception as e:
+                print(f"⚠️ 每日新聞收集失敗: {e}")
+
         ticker_list = list(self.models.keys())
-        today_str = datetime.datetime.now().strftime("%Y-%m-%d")
-        results = []
+        
+        # 🚀 修正：改為逐個預測並立刻存檔，避免中斷導致全部遺失
+        count = 0
         for ticker in ticker_list:
             try:
+                print(f"🔮 [Morning Job] 正在預測 {ticker} ... ({count+1}/{len(ticker_list)})")
                 _, hist, _, _ = get_stock_data(ticker)
+                
+                if hist.empty or len(hist) < self.lookback:
+                    continue
+                    
+                # 🛠️ 數據日期檢查：確保 base_price 是最新的 (通常是昨天或上一個交易日)
+                # 🆕 修正：如果最後一筆是今天且成交量為 0，則基準價應取前一筆
+                last_row = hist.iloc[-1]
+                if last_row.name.date() == now.date() and last_row["Volume"] == 0:
+                    base_row = hist.iloc[-2]
+                else:
+                    base_row = last_row
+
+                last_data_date = base_row.name.strftime("%Y-%m-%d")
+                base = float(base_row["Close"])
+                open_p = float(base_row["Open"])
+                
                 pred = self.predict_next_price(ticker, hist)
+                
                 if pred:
-                    base = float(hist["Close"].iloc[-1])
-                    results.append(
-                        {
-                            "date": today_str,
-                            "ticker": ticker,
-                            "base_price": base,
-                            "predicted_price": float(pred),
-                            "expected_change_pct": round((pred - base) / base * 100, 2),
-                            "actual_price": None,
-                            "accuracy": "等待收盤",
-                        }
-                    )
-            except:
+                    new_rec = {
+                        "date": today_str,
+                        "data_last_date": last_data_date, # 紀錄數據源的最後日期
+                        "ticker": ticker,
+                        "base_price": base,       # 昨收價 (或數據最後一筆收盤)
+                        "open_price": open_p,     # 數據最後一筆開盤
+                        "predicted_price": float(pred),
+                        "expected_change_pct": round((pred - base) / base * 100, 2),
+                        "actual_price": None,
+                        "diff_pct": None,         # 🆕 初始化誤差百分比
+                        "accuracy": "等待收盤",
+                    }
+                    
+                    # 讀取現有紀錄
+                    all_recs = []
+                    if os.path.exists(self.prediction_file):
+                        try:
+                            with open(self.prediction_file, "r", encoding="utf-8") as f:
+                                all_recs = json.load(f)
+                        except: pass
+                    
+                    # 移除該股票今日的舊預測，加入新的 (Upsert 邏輯)
+                    all_recs = [r for r in all_recs if not (r["date"] == today_str and r["ticker"] == ticker)]
+                    all_recs.append(new_rec)
+                    
+                    # 立刻存檔
+                    with open(self.prediction_file, "w", encoding="utf-8") as f:
+                        json.dump(all_recs, f, ensure_ascii=False, indent=4)
+                    
+                    count += 1
+            except Exception as e:
+                print(f"⚠️ 預測 {ticker} 失敗: {e}")
                 continue
 
-        # 讀取並合併舊紀錄
-        all_recs = []
-        if os.path.exists(self.prediction_file):
-            try:
-                with open(self.prediction_file, "r", encoding="utf-8") as f:
-                    all_recs = json.load(f)
-            except:
-                pass
-        all_recs = [r for r in all_recs if r["date"] != today_str] + results
-        with open(self.prediction_file, "w", encoding="utf-8") as f:
-            json.dump(all_recs, f, ensure_ascii=False, indent=4)
-        return len(results)
+        return count
 
-    def validate_afternoon_results(self):
-        """收盤後驗證準確度"""
+    def validate_afternoon_results(self, force=False):
+        """收盤後驗證準確度 (增量存檔版)"""
         if not os.path.exists(self.prediction_file):
             return 0, []
+            
         with open(self.prediction_file, "r", encoding="utf-8") as f:
             records = json.load(f)
-        today_str = datetime.datetime.now().strftime("%Y-%m-%d")
+            
+        now = datetime.datetime.now()
+        today_str = now.strftime("%Y-%m-%d")
         count = 0
+        
         for r in records:
-            if r["date"] == today_str and not r.get("actual_price"):
+            # 🆕 修正：不僅針對今日，只要是「等待收盤」或「之前驗證失敗/疑似錯誤」的都可以嘗試驗證
+            should_validate = (
+                not r.get("actual_price") or 
+                r.get("accuracy") == "等待收盤" or 
+                r.get("accuracy") in ["❌", "??", "error"] or
+                r.get("diff_pct") is None
+            )
+            
+            if should_validate:
                 try:
-                    _, hist, _, _ = get_stock_data(r["ticker"])
-                    actual = float(hist["Close"].iloc[-1])
-                    r["actual_price"] = actual
-                    diff = abs(r["predicted_price"] - actual) / actual * 100
-                    r["accuracy"] = (
-                        "⭐⭐⭐" if diff < 1.0 else ("⭐" if diff < 2.5 else "❌")
-                    )
-                    count += 1
-                except:
+                    ticker = r["ticker"]
+                    target_date = r["date"] # 預測目標日期
+                    
+                    print(f"✅ [Afternoon Job] 正在嘗試驗證 {ticker} (目標日期: {target_date})...")
+                    # 🚀 強制不使用快取，獲取最新數據
+                    _, hist, _, _ = get_stock_data(ticker, use_cache=False)
+                    
+                    if not hist.empty:
+                        # 確保索引是日期時間格式且無時區
+                        if hist.index.tz is not None:
+                            hist.index = hist.index.tz_localize(None)
+                            
+                        last_data_date = hist.index[-1].strftime("%Y-%m-%d")
+                        
+                        # 🛠️ 修改：如果 last_data_date == target_date，即視為可驗證 (即時價格)
+                        if not force and last_data_date < target_date:
+                            print(f"⏳ [Afternoon Job] {ticker} 數據尚未更新 (最新為 {last_data_date}，目標為 {target_date})，跳過。")
+                            continue
+                            
+                        # 找到目標日期的收盤價，如果找不到則用最後一筆
+                        try:
+                            # 嘗試精確匹配日期
+                            target_row = hist.loc[hist.index.strftime("%Y-%m-%d") == target_date]
+                            if not target_row.empty:
+                                # 🆕 額外檢查：成交量需大於 0 (排除盤前占位數據)
+                                if target_row["Volume"].iloc[0] == 0 and not force:
+                                    print(f"⏳ [Afternoon Job] {ticker} 目標日期數據成交量為 0，視為尚未開盤或停盤，跳過。")
+                                    continue
+                                    
+                                actual = float(target_row["Close"].iloc[0])
+                                actual_date = target_date
+                            else:
+                                # 若無精確日期，且數據最新日期已超過目標日，才取最後一筆 (例如預測在週末)
+                                if last_data_date > target_date:
+                                    actual = float(hist["Close"].iloc[-1])
+                                    actual_date = last_data_date
+                                else:
+                                    # 數據還沒追上目標日期，繼續等待
+                                    continue
+                        except Exception as e:
+                            print(f"⚠️ 提取價格時發生錯誤: {e}")
+                            continue
+
+                        r["actual_price"] = actual
+                        r["actual_date"] = actual_date
+                        
+                        # 計算準確度
+                        diff = abs(r["predicted_price"] - actual) / actual * 100
+                        r["diff_pct"] = round(diff, 2)
+                        r["accuracy"] = (
+                            "⭐⭐⭐" if diff < 1.0 else ("⭐" if diff < 2.5 else "❌")
+                        )
+                        count += 1
+                        
+                        # 立刻存檔 (增量保存)
+                        with open(self.prediction_file, "w", encoding="utf-8") as f:
+                            json.dump(records, f, ensure_ascii=False, indent=4)
+                except Exception as e:
+                    print(f"⚠️ 驗證 {r.get('ticker')} 失敗: {e}")
                     continue
-        with open(self.prediction_file, "w", encoding="utf-8") as f:
-            json.dump(records, f, ensure_ascii=False, indent=4)
+                    
         return count, records
 
     def _save_model(self, ticker, model, scaler, last_loss, input_dim):
         """安全儲存模型"""
         path = os.path.join(self.model_dir, f"{ticker}.pth")
+        # 🚀 紀錄模型類型
+        model_type = "HybridTransLSTM" if isinstance(model, HybridTransLSTM) else "LSTMModel"
+        
+        # 🚀 使用 getattr 安全獲取參數，避免環境快取舊定義導致報錯
+        h_dim = getattr(model, 'hidden_dim', 256)
+        n_layers = getattr(model, 'num_layers', 3)
+
         torch.save(
             {
                 "model_state_dict": model.state_dict(),
                 "scaler": scaler,
                 "last_loss": last_loss,
                 "input_dim": input_dim,
-                "hidden_dim": model.hidden_dim,
-                "num_layers": model.num_layers,
+                "hidden_dim": h_dim,
+                "num_layers": n_layers,
+                "model_type": model_type,
                 "version": self.MODEL_VERSION,
             },
             path,
