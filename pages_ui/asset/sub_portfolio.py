@@ -4,7 +4,7 @@ from pages_ui.components.shared import header_with_icon, status_card
 
 def render_portfolio_overview(account, current_price_map):
     """資產庫存概況子模組"""
-    header_with_icon("我的資產庫存", "💰", "實時監控持股損益與分布")
+    header_with_icon("我的資產庫存", "", "實時監控持股損益與分布")
     
     if not account.portfolio:
         st.info("目前尚無持倉。")

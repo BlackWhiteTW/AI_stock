@@ -8,7 +8,7 @@ def render_tab_battle(trader_bot_v1, trader_bot_v2, symbol, hist_data, df_stocks
     """
     st.header("⚔️ AI 自動化交易中心")
     
-    battle_tab1, battle_tab2 = st.tabs(["🔍 市場掃描與採購", "🤖 機器人控制面板"])
+    battle_tab1, battle_tab2 = st.tabs([" 市場掃描與採購", " 機器人控制面板"])
     
     with battle_tab1:
         render_market_scanner(df_stocks, ai_advisor)

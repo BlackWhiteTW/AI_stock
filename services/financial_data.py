@@ -230,15 +230,29 @@ class FinancialDataManager:
 
     def _build_etf_summary(self, ticker):
         """建立 ETF 專用摘要，避免傳統財報空白時直接失敗"""
+        stock_info = self._load_etf_stock_info(ticker)
         etf_profile = {
             "source": "Yahoo TW",
             "update_time": datetime.now().isoformat(),
-            "holding_count": 0,
+            "holding_count": None,
             "top_holdings": [],
             "sector_weights": [],
             "raw_summary": {},
             "revenue": {},
             "eps": {},
+            "stock_info": stock_info,
+            "fund_name": stock_info.get("longName") or stock_info.get("shortName"),
+            "market_price": stock_info.get("regularMarketPrice"),
+            "nav_price": stock_info.get("navPrice"),
+            "dividend_yield": stock_info.get("dividendYield"),
+            "expense_ratio": stock_info.get("netExpenseRatio"),
+            "total_assets": stock_info.get("netAssets")
+            or stock_info.get("totalAssets"),
+            "ytd_return": stock_info.get("ytdReturn"),
+            "three_year_return": stock_info.get("threeYearAverageReturn"),
+            "five_year_return": stock_info.get("fiveYearAverageReturn"),
+            "beta": stock_info.get("beta3Year") or stock_info.get("beta"),
+            "pe_ratio": stock_info.get("trailingPE"),
         }
 
         if self.yahoo_scraper:
@@ -246,14 +260,20 @@ class FinancialDataManager:
                 etf_data = self.yahoo_scraper.get_all_financial_data(ticker, False)
                 if isinstance(etf_data, dict):
                     holding = etf_data.get("holding", {}) or {}
+                    top_holdings = holding.get("top_holdings", [])
+                    sector_weights = holding.get("sector_weights", [])
                     etf_profile.update(
                         {
                             "update_time": etf_data.get(
                                 "update_time", etf_profile["update_time"]
                             ),
-                            "holding_count": len(holding.get("top_holdings", [])),
-                            "top_holdings": holding.get("top_holdings", []),
-                            "sector_weights": holding.get("sector_weights", []),
+                            "holding_count": (
+                                len(top_holdings)
+                                if top_holdings
+                                else etf_profile["holding_count"]
+                            ),
+                            "top_holdings": top_holdings,
+                            "sector_weights": sector_weights,
                             "raw_summary": holding.get("holdings_summary", {}),
                             "revenue": etf_data.get("revenue", {}),
                             "eps": etf_data.get("eps", {}),
@@ -261,6 +281,9 @@ class FinancialDataManager:
                     )
             except Exception as e:
                 print(f"ETF 摘要獲取失敗 [{ticker}]: {e}")
+
+        if not etf_profile.get("raw_summary") and stock_info:
+            etf_profile["raw_summary"] = self._build_etf_raw_summary(stock_info)
 
         return {
             "ticker": ticker,
@@ -272,11 +295,51 @@ class FinancialDataManager:
             "latest_period": "N/A",
             "profitability": {"roe": 0, "roa": 0, "net_profit_margin": 0},
             "solvency": {"debt_ratio": 0, "current_ratio": 0},
-            "valuation": {"pe_ratio": 0, "pb_ratio": 0, "market_cap": 0},
-            "dividend": {"dividend_yield": 0},
-            "risk": {"beta": 0},
+            "valuation": {
+                "pe_ratio": stock_info.get("trailingPE") or 0,
+                "pb_ratio": stock_info.get("priceToBook") or 0,
+                "market_cap": stock_info.get("marketCap") or 0,
+            },
+            "dividend": {"dividend_yield": stock_info.get("dividendYield") or 0},
+            "risk": {
+                "beta": stock_info.get("beta3Year") or stock_info.get("beta") or 0
+            },
             "etf_profile": etf_profile,
         }
+
+    def _load_etf_stock_info(self, ticker):
+        """讀取 ETF 的本地 stock_info 快取，作為沒有持股明細時的主要顯示來源。"""
+        try:
+            info_path = os.path.join(self.data_dir, ticker, "stock_info.json")
+            if os.path.exists(info_path):
+                with open(info_path, "r", encoding="utf-8") as f:
+                    return json.load(f)
+        except Exception as e:
+            print(f"讀取 ETF 本地資料失敗 [{ticker}]: {e}")
+
+        return {}
+
+    def _build_etf_raw_summary(self, stock_info):
+        """將 stock_info 轉成可顯示的摘要文字。"""
+        summary = {}
+        mapping = {
+            "基金名稱": stock_info.get("longName") or stock_info.get("shortName"),
+            "市價": stock_info.get("regularMarketPrice"),
+            "淨值": stock_info.get("navPrice"),
+            "淨資產": stock_info.get("netAssets") or stock_info.get("totalAssets"),
+            "殖利率": stock_info.get("dividendYield"),
+            "費用率": stock_info.get("netExpenseRatio"),
+            "今年以來報酬": stock_info.get("ytdReturn"),
+            "近三年平均報酬": stock_info.get("threeYearAverageReturn"),
+            "近五年平均報酬": stock_info.get("fiveYearAverageReturn"),
+            "三年 Beta": stock_info.get("beta3Year") or stock_info.get("beta"),
+        }
+
+        for key, value in mapping.items():
+            if value is not None and value != "":
+                summary[key] = value
+
+        return summary
 
     def calculate_financial_ratios(self, ticker):
         """

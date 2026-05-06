@@ -34,9 +34,6 @@ class LLMService:
         self.available_models = []
         self.priority_list = [
             "models/gemini-3.1-flash-lite-preview",
-            "models/gemini-2.5-flash",
-            "models/gemini-2.0-flash",
-            "models/gemini-1.5-flash",
         ]
 
     def _ensure_model_initialized(self):
@@ -69,8 +66,6 @@ class LLMService:
                 # 保底
                 available_models = [
                     "models/gemini-3.1-flash-lite-preview",
-                    "models/gemini-2.5-flash",
-                    "models/gemini-1.5-flash",
                 ]
 
             self.available_models = available_models
@@ -99,18 +94,109 @@ class LLMService:
 
     def call_gemini(self, prompt, use_fallback=True):
         """
-        🚀 核心：具備指數退避重試與自動降級機制的 Gemini 調用
+        🚀 核心：具備指數退避重試與自動降級機制的 Gemini 調用 (已升級至 generate_content API)
         """
         import time
         import random
 
         if not self._ensure_model_initialized():
             return "⚠️ Gemini API 未設定，無法提供服務。"
+        # 重試設定
+        max_attempts = 3
+        base_backoff = 1.0
+        last_error = None
 
-        # ... (中間邏輯保持不變) ...
-        # (這裡省略中間部分，確保替換正確)
-        last_error = "未知錯誤"
-        # ...
+        # 預設生成參數（保守且通用）
+        gen_params = {
+            "max_output_tokens": 512,
+            "temperature": 0.2,
+            "top_p": 0.95,
+        }
+
+        def _extract_text(resp):
+            try:
+                # GenerativeAI 回應對象
+                if hasattr(resp, "text"):
+                    return getattr(resp, "text")
+
+                # dict-like responses
+                if isinstance(resp, dict):
+                    if "candidates" in resp and resp["candidates"]:
+                        c = resp["candidates"][0]
+                        if isinstance(c, dict):
+                            content = c.get("content")
+                            if isinstance(content, dict):
+                                return content.get("parts", [{}])[0].get("text", "")
+                            return c.get("text") or str(c)
+                    if "text" in resp:
+                        return resp.get("text")
+                    if "content" in resp:
+                        return resp.get("content")
+                    return str(resp)
+
+                # object-like responses
+                if hasattr(resp, "content"):
+                    return getattr(resp, "content")
+                if hasattr(resp, "candidates") and getattr(resp, "candidates"):
+                    cand = getattr(resp, "candidates")[0]
+                    if hasattr(cand, "content"):
+                        content_obj = getattr(cand, "content")
+                        if hasattr(content_obj, "parts"):
+                            parts = getattr(content_obj, "parts")
+                            if parts and hasattr(parts[0], "text"):
+                                return getattr(parts[0], "text")
+                    return str(cand)
+            except Exception:
+                pass
+            return str(resp)
+
+        for attempt in range(1, max_attempts + 1):
+            try:
+                # 優先使用最新的 generate_content API
+                resp = None
+                try:
+                    if self.model is not None:
+                        if hasattr(self.model, "generate_content"):
+                            # 新 API：generate_content
+                            resp = self.model.generate_content(
+                                prompt,
+                                generation_config=genai.types.GenerationConfig(
+                                    **gen_params
+                                ),
+                                stream=False,
+                            )
+                        elif hasattr(self.model, "generate"):
+                            # 舊 API：generate (fallback)
+                            resp = self.model.generate(prompt=prompt, **gen_params)
+                        else:
+                            raise Exception("Model does not support generate methods")
+                    else:
+                        raise Exception("Model not initialized")
+                except (TypeError, AttributeError):
+                    # 某些版本使用不同參數名稱
+                    try:
+                        if self.model is not None and hasattr(
+                            self.model, "generate_content"
+                        ):
+                            resp = self.model.generate_content(prompt)
+                        elif self.model is not None and hasattr(self.model, "generate"):
+                            resp = self.model.generate(prompt=prompt)
+                        else:
+                            resp = genai.generate(model=self.model_name, input=prompt)
+                    except Exception as e:
+                        raise
+
+                text = _extract_text(resp)
+                if text and len(str(text).strip()) > 0:
+                    return str(text)
+                last_error = "empty response"
+            except Exception as e:
+                last_error = str(e)
+
+            # 指數退避
+            sleep_for = base_backoff * (2 ** (attempt - 1)) + random.random() * 0.2
+            time.sleep(sleep_for)
+
         return f"❌ 所有可用的 Gemini 模型調用皆失敗。最後錯誤: {last_error}"
 
     def generate_stock_analysis(

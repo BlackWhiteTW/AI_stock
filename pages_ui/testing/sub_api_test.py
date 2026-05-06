@@ -7,24 +7,24 @@ from pages_ui.components.shared import header_with_icon
 
 def render_api_testing():
     """API 連線診斷子模組"""
-    header_with_icon("系統服務診斷", "🔧", "檢查 AI 模型與外部數據源的連線狀態")
+    header_with_icon("系統服務診斷", "", "檢查 AI 模型與外部數據源的連線狀態")
     
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("🤖 AI 服務測試")
+        st.subheader(" AI 服務測試")
         if st.button("測試 Gemini API 連線", key="test_gemini"):
             _test_gemini()
             
     with col2:
-        st.subheader("🌐 數據源測試")
+        st.subheader(" 數據源測試")
         if st.button("測試 Yahoo Finance 連線", key="test_yf"):
             _test_yfinance()
         if st.button("測試 SerpAPI (Google Search) 連線", key="test_serp"):
             _test_serpapi()
 
     st.divider()
-    st.subheader("📰 周期性新聞收集器")
+    st.subheader(" 周期性新聞收集器")
     st.caption("檢查與手動更新 `data/weekly_news` 資料夾中的新聞數據")
     
     col_news1, col_news2 = st.columns(2)
@@ -33,7 +33,7 @@ def render_api_testing():
     collector = WeeklyNewsCollector()
     
     with col_news1:
-        if st.button("🚀 執行手動新聞收集", key="run_news_collect"):
+        if st.button(" 執行手動新聞收集", key="run_news_collect"):
             with st.spinner("正在搜尋並分析新聞..."):
                 try:
                     stats = collector.collect_daily_news()
@@ -43,10 +43,10 @@ def render_api_testing():
                     st.error(f"❌ 收集失敗: {e}")
     
     with col_news2:
-        if st.button("📊 查看本周收集摘要", key="view_news_summary"):
+        if st.button(" 查看本周收集摘要", key="view_news_summary"):
             summary = collector.get_recent_news_summary(days=7)
-            st.write(f"📅 **本周累積新聞數**: {summary['total_news']} 則")
-            st.write(f"🧠 **平均市場情緒**: {summary['average_sentiment']:.2f}")
+            st.write(f" **本周累積新聞數**: {summary['total_news']} 則")
+            st.write(f" **平均市場情緒**: {summary['average_sentiment']:.2f}")
             if summary['by_category']:
                 st.write("**類別統計**:")
                 st.json(summary['by_category'])

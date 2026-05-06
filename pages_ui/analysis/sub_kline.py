@@ -56,4 +56,4 @@ def render_kline_chart(symbol, hist_data, current_price):
     )
     
     st.plotly_chart(fig, use_container_width=True)
-    st.info("💡 提示：使用滑動條調整顯示範圍。")
+    st.info(" 提示：使用滑動條調整顯示範圍。")

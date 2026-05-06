@@ -161,28 +161,25 @@ class MarketTrainingSystem:
                 }
                 return False, msg, 0
 
-            # 訓練模型
+            # 訓練模型 (LSTM 功能已移除)
             start_time = time.time()
 
-            # 使用遷移學習加速訓練
-            result, final_loss = self.service.train_deep_learning_model(
-                ticker, hist, use_transfer_learning=True  # 啟用遷移學習
-            )
-
+            # 🔄 LSTM 訓練已停用
+            msg = "⚠️ LSTM 深度學習功能已停用，系統現使用技術分析與市場情緒進行決策。"
             elapsed = time.time() - start_time
 
             # 記錄訓練歷史
             self.training_history[ticker] = {
                 "last_train_date": datetime.now().strftime("%Y-%m-%d"),
                 "last_train_time": datetime.now().strftime("%H:%M:%S"),
-                "status": "success",
-                "final_loss": float(final_loss),
+                "status": "skipped",
+                "reason": msg,
                 "training_time": elapsed,
                 "data_days": len(hist),
                 "stock_name": stock_name,
             }
 
-            return True, f"Loss: {final_loss:.6f}", elapsed
+            return False, msg, elapsed
 
         except Exception as e:
             msg = str(e)[:100]

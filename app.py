@@ -115,6 +115,37 @@ symbol, hist_data, current_price, stock_info, df_stocks = render_sidebar(
     account, ai_advisor
 )
 
+
+# --- 公告功能 ---
+def render_announcements():
+    """
+    在畫面最上方顯示重要公告與系統消息
+    """
+    announcements = [
+        {
+            "type": "info",
+            "title": "系統公告",
+            "message": "LSTM 模型已移除，系統現使用技術分析與市場情緒信號進行交易決策。\n目前的 LSTM 效果太差，且訓練過程過於複雜，無法達到預期效果。未來會考慮引入更適合的模型架構。",
+        },
+    ]
+
+    if announcements:
+        st.markdown("---")
+        st.subheader("系統公告")
+
+        for ann in announcements:
+            if ann["type"] == "info":
+                st.info(f"**{ann['title']}**\n\n{ann['message']}")
+            elif ann["type"] == "warning":
+                st.warning(f"**{ann['title']}**\n\n{ann['message']}")
+            elif ann["type"] == "success":
+                st.success(f"**{ann['title']}**\n\n{ann['message']}")
+
+        st.markdown("---")
+
+
+render_announcements()
+
 # --- 主畫面 ---
 st.title("股票模擬訓練系統")
 
@@ -125,7 +156,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(
         "財務報表分析",
         "AI 智能投顧",
         "AI 自動化股票交易",
-        "🧪 AI 實驗室",  # 🆕 v6.0 實驗室
+        "AI 實驗室",  # 🆕 v6.0 實驗室
     ]
 )
 
